@@ -10,7 +10,7 @@ We all know the population is growing rapidly worldwide. However, the impact of 
 ### Solution
 Vizualizing populations and suicides alone will not help with providing a clear picture. For this reason, I think a worldmap showing the correlation between growth in population and suicide rates is necessary for providing a clear picture. 
 
-afbeelding maken
+![alt text](data/sketch.png)
 
 ## Prerequisites
 ### Datasource:
