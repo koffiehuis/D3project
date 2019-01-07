@@ -11,12 +11,12 @@ We all know the population is growing rapidly worldwide. However, the impact of 
 ### Solution
 Vizualizing populations and suicides alone will not help with providing a clear picture. For this reason, I think a worldmap showing the correlation between growth in population and suicide rates is necessary for providing a clear picture. 
 
-![alt text](data/sketch.png)
+![alt text](olddata/sketch.png)
 
 ## Prerequisites
 ### Datasource:
-* [This dataset](/data/population.csv) from [the world bank](https://data.worldbank.org/indicator/SP.POP.TOTL) which consists of the total population for every country from 1960 to 2016. Data from 1960 to 1989 will be excluded. 
-* [This dataset](/data/suicide.csv) from [this page](https://ourworldindata.org/suicide) consists off suicide rates for every country from 1990 to 2016.
+* [This dataset](/olddata/population.csv) from [the world bank](https://data.worldbank.org/indicator/SP.POP.TOTL) which consists of the total population for every country from 1960 to 2016. Data from 1960 to 1989 will be excluded. 
+* [This dataset](/olddata/suicide.csv) from [this page](https://ourworldindata.org/suicide) consists off suicide rates for every country from 1990 to 2016.
 * Surface area's per country will be excluded from [this](https://raw.githubusercontent.com/underscoreio/csv-workshop/master/src/main/resources/countries.csv) dataset.
 
 ### Transformation:
