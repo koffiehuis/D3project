@@ -17,8 +17,9 @@ To answer questions like these and provide a clear picture on the current change
 * This dataset from [the united nations](https://www.kaggle.com/unitednations/international-energy-statistics) which consists of data for many different energy sources for each country and per year. 
 
 ### Transformation:
-* The total population of each will need to be divided that countries surface area.
-* For convenience all data, population/suicide/surface will be combined in a new csv file.
+* The data will need to be grouped in regions for figure 4.
+* Categories will need to be altered. Categories which are too small or irrelevant will be put in an "other" category.
+* Also, a lot of preprocessing will need to be done, since the file would otherwise be too big.
 
 ### Libraries:
 * [Datamaps](http://datamaps.github.io/) will be needed for the worldmaps.
@@ -26,9 +27,12 @@ To answer questions like these and provide a clear picture on the current change
 
 ### Similar:
 * The worldmaps with slider will be similar to [this](https://data.worldbank.org/indicator/SP.POP.TOTL?view=map) worldmap.
-* A scatterplot for the average population per sqr miles and suicide rates would resemble [this](https://charts.animateddata.co.uk/whatmakesushappy/) plot.
+* Linking a piechart to a map, and showing values in a transparent manner. Like [this](https://demos.datalabsagency.com/d3/acc-map/).
+
 
 ### Hardest parts:
-* Making the different charts co-interactive. So clicking a country on the worldmap will determine which data is being shown in the linecharts and scatter/correlation plot.
-* Providing a "all countries" option, where the two linecharts and the scatter/correlation plot show all the data combined.
+* Making the different charts co-interactive. So clicking a country on the worldmap will determine which data is being shown in the linecharts and piechart.
+* Trimming down this huge dataset.
+* Making well-informed decisions when grouping the data in energy categories and regions.
+* Preprocessing the data in such a way that my page will load fast.
 
