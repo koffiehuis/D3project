@@ -1,14 +1,14 @@
-# Population and Suicide Visualized
+# Energy sources Visualized
 ##### Credentials
 * Mark van Malestein
 * 10807640
 * markmalestein@gmail.com
 
 ### Problem
-We all know the population is growing rapidly worldwide. However, the impact of this growth on our mental well-being is less clear. Even more so, when talking about 'far-away' countries and different cultures. 
+Nowadays, as the effects of climate changes become more and more visible, renewable energy is becoming an increasingly important source of energy. But how big is the contribution of renewable energy when compared to our total energy supply? Are 'outdated' energy sources such as oil and coal decreasing? In which countries are the most rapid changes being made?
 
 ### Solution
-Vizualizing populations and suicides alone will not help with providing a clear picture. For this reason, I think a worldmap showing the correlation between growth in population and suicide rates is necessary for providing a clear picture. 
+To answer questions like these and provide a clear picture on the current changes, we will apply different visualisation tools. These tools will be linked to provide an interactive page to work with and help answer all your questions concerning changes in energy source management.
 
 ![alt text](data/sketch.png)
 
