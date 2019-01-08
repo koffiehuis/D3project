@@ -32,6 +32,7 @@ For preprocessing the following steps will need to be taken:
 
 ## Methods:
 ### Preprocessing methods:
+![alt_text](data/preprocessing1.png)
 #### load_csv()
 Here csv will be loaded with pandas and returned to create_categories()
 #### create_categories()
