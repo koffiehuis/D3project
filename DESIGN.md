@@ -13,6 +13,8 @@ The dataset from [this site](https://www.kaggle.com/unitednations/international-
 * Region ID
 * Tooltip information
 
+[!alt_text](data/sketchnew.jpg)
+
 ## Transformations:
 The selections to be made will be as following:
 * Coal, peat and oil shale
