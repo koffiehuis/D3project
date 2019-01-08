@@ -1,4 +1,4 @@
-# Design doc
+# Design doc: Energy Sources Visualized
 ### Credentials:
 * Mark van Malestein
 * 10807640
