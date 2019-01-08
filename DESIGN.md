@@ -41,6 +41,9 @@ Here different commodities will be selected and added to the correct category, a
 Now a region id will be added to each row. This will result in yet an extra column. Dataframe will be returned to write_json().
 #### write_json()
 Writes the preprocessed data to JSON-file.
+
+![alt_text](data/diagram1.jpg)
+
 ### Initialization of page:
 #### loadJson()
 The JSON-file is loaded and saved to a global variable.
