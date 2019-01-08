@@ -61,17 +61,17 @@ Shows lines representing the amount of 1 category for each region over time. The
 
 Also helper functions such as calculateGradient(), extractData(), makeSelectTag() etc. will be used.
 ### Updating the pages:
-#### If the select tag is changed:
-#### reloadMap()
+#### reloadMap(), when the select tag is used
 This function reloads the values for the world map. Also the gradient and legend are re-implied.
 
-#### If worldmap is clicked:
-#### reloadLineCategory()
-This function reloads figure 3
+### reloadPie(), when a country on the map is clicked
+Reloads the piechart.
 
-#### If piechart is clicked:
-#### reloadLineRegion()
-This function reloads figure 4
+#### reloadLineCategory(), when a country on the map is clicked
+This function reloads figure 3.
+
+#### reloadLineRegion(), when the piechart is clicked
+This function reloads figure 4.
 
 ## APIs and D3 plugins:
-For this project no APIs are needed, since I've got a local csv file. The D3 plugins needed are d3.v5 (https://d3js.org/d3.v5.min.js) and [datamaps](https://github.com/markmarkoh/datamaps/releases/tag/v0.5.0)
+For this project no APIs are needed, since I've got a local csv file. The D3 plugins needed are d3.v5 (https://d3js.org/d3.v5.min.js) and [datamaps](https://github.com/markmarkoh/datamaps/releases/tag/v0.5.0).
