@@ -64,7 +64,7 @@ Also helper functions such as calculateGradient(), extractData(), makeSelectTag(
 #### reloadMap(), when the select tag is used
 This function reloads the values for the world map. Also the gradient and legend are re-implied.
 
-### reloadPie(), when a country on the map is clicked
+#### reloadPie(), when a country on the map is clicked
 Reloads the piechart.
 
 #### reloadLineCategory(), when a country on the map is clicked
