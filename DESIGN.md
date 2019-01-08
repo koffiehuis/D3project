@@ -74,4 +74,4 @@ This function reloads figure 3
 This function reloads figure 4
 
 ## APIs and D3 plugins:
-For this project no APIs are needed, since I've got a local csv file. The D3 plugins needed are
+For this project no APIs are needed, since I've got a local csv file. The D3 plugins needed are d3.v5 (https://d3js.org/d3.v5.min.js) and [datamaps](https://github.com/markmarkoh/datamaps/releases/tag/v0.5.0)
