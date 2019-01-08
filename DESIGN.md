@@ -41,6 +41,24 @@ Now a region id will be added to each row. This will result in yet an extra colu
 #### write_json()
 Writes the preprocessed data to JSON-file.
 ### Initialization of page:
+#### loadJson()
+The JSON-file is loaded and saved to a global variable.
+
+#### initializeChartContainers()
+The chart containers are called, and the layout of the page is determined.
+
+#### makeMap()
+Shows worldmap with a gradient. The gradient represents the amount of a given category. For this worldmap I will need to implement the datamaps library. Countries can be clicked.
+
+#### makePie()
+Shows amounts per categories in a piechart for a given country. When hovering over the “Tooltip information” will be shown. Pie-slices (categories) can be clicked.
+
+#### makeLineCategory()
+Shows lines representing the amount of energy production over time. The content of this figure is dependent on the worldmap.
+
+#### makeLineRegion()
+Shows lines representing the amount of 1 category for each region over time. The content of this figure is dependent on the piechart.
+
 ### Updating the pages:
 
 ## APIs and D3 plugins:
