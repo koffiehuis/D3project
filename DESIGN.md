@@ -13,7 +13,7 @@ The dataset from [this site](https://www.kaggle.com/unitednations/international-
 * Region ID
 * Tooltip information
 
-[!alt_text](data/sketchnew.jpg)
+![alt_text](data/sketchnew.jpg)
 
 ## Transformations:
 The selections to be made will be as following:
@@ -32,6 +32,14 @@ For preprocessing the following steps will need to be taken:
 
 ## Methods:
 ### Preprocessing methods:
+#### load_csv()
+Here csv will be loaded with pandas and returned to create_categories()
+#### create_categories()
+Here different commodities will be selected and added to the correct category, also information will be saved in an extra column. Finally, missing data will be given a None value. Dataframe will be returned to add_id().
+#### add_id()
+Now a region id will be added to each row. This will result in yet an extra column. Dataframe will be returned to write_json().
+#### write_json()
+Writes the preprocessed data to JSON-file.
 ### Initialization of page:
 ### Updating the pages:
 
