@@ -14,6 +14,7 @@ The dataset from [this site](https://www.kaggle.com/unitednations/international-
 * Tooltip information
 
 ![alt_text](data/sketchnew.jpg)
+*Shows diagram of preprocessing (quite simple)*
 
 ## Transformations:
 The selections to be made will be as following:
@@ -33,6 +34,7 @@ For preprocessing the following steps will need to be taken:
 ## Methods:
 ### Preprocessing methods:
 ![alt_text](data/preprocessing1.png)
+*Show diagram of initializing (left) and possible updating (right) of the charts*
 #### load_csv()
 Here csv will be loaded with pandas and returned to create_categories()
 #### create_categories()
