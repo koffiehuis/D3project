@@ -14,7 +14,7 @@ The dataset from [this site](https://www.kaggle.com/unitednations/international-
 * Tooltip information
 
 ![alt_text](data/sketchnew.jpg)
-*Shows diagram of preprocessing (quite simple)*
+*Shows my design sketch again*
 
 ## Transformations:
 The selections to be made will be as following:
@@ -33,8 +33,10 @@ For preprocessing the following steps will need to be taken:
 
 ## Methods:
 ### Preprocessing methods:
+
 ![alt_text](data/preprocessing1.png)
-*Show diagram of initializing (left) and possible updating (right) of the charts*
+*Shows diagram of preprocessing (quite simple)*
+
 #### load_csv()
 Here csv will be loaded with pandas and returned to create_categories()
 #### create_categories()
@@ -45,27 +47,24 @@ Now a region id will be added to each row. This will result in yet an extra colu
 Writes the preprocessed data to JSON-file.
 
 ![alt_text](data/diagram1.jpg)
+*Show diagram of initializing (left) and possible updating (right) of the charts*
 
 ### Initialization of page:
 #### loadJson()
 The JSON-file is loaded and saved to a global variable.
-
 #### initializeChartContainers()
 The chart containers are called, and the layout of the page is determined.
-
 #### makeMap()
 Shows worldmap with a gradient. The gradient represents the amount of a given category. For this worldmap I will need to implement the datamaps library. Countries can be clicked.
-
 #### makePie()
 Shows amounts per categories in a piechart for a given country. When hovering over the “Tooltip information” will be shown. Pie-slices (categories) can be clicked.
-
 #### makeLineCategory()
 Shows lines representing the amount of energy production over time. The content of this figure is dependent on the worldmap.
-
 #### makeLineRegion()
 Shows lines representing the amount of 1 category for each region over time. The content of this figure is dependent on the piechart.
 
 Also helper functions such as calculateGradient(), extractData(), makeSelectTag() etc. will be used.
+
 ### Updating the pages:
 #### reloadMap(), when the select tag is used
 This function reloads the values for the world map. Also the gradient and legend are re-implied.
