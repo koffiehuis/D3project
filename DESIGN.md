@@ -79,4 +79,4 @@ This function reloads figure 3.
 This function reloads figure 4.
 
 ## APIs and D3 plugins:
-For this project no APIs are needed, since I've got a local csv file. The D3 plugins needed are d3.v5 (https://d3js.org/d3.v5.min.js) and [datamaps](https://github.com/markmarkoh/datamaps/releases/tag/v0.5.0).
+For this project no APIs are needed, since I've got a local csv file. The D3 plugins needed are d3.v5 (https://d3js.org/d3.v5.min.js) and [datamaps](https://github.com/markmarkoh/datamaps/releases/tag/v0.5.0). Furthermore, for preprocessing in python I will use the pandas library ([link](https://pandas.pydata.org/pandas-docs/version/0.23.4/generated/pandas.DataFrame.html)).
