@@ -59,6 +59,19 @@ Shows lines representing the amount of energy production over time. The content 
 #### makeLineRegion()
 Shows lines representing the amount of 1 category for each region over time. The content of this figure is dependent on the piechart.
 
+Also helper functions such as calculateGradient(), extractData(), makeSelectTag() etc. will be used.
 ### Updating the pages:
+#### If the select tag is changed:
+#### reloadMap()
+This function reloads the values for the world map. Also the gradient and legend are re-implied.
+
+#### If worldmap is clicked:
+#### reloadLineCategory()
+This function reloads figure 3
+
+#### If piechart is clicked:
+#### reloadLineRegion()
+This function reloads figure 4
 
 ## APIs and D3 plugins:
+For this project no APIs are needed, since I've got a local csv file. The D3 plugins needed are
