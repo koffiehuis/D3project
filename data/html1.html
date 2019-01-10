@@ -3,39 +3,50 @@
 10807640
 d3-linked-views -->
 
+<!-- PROBEREN ECHTE GRAFIEKEN TE IMPLEMENTERE -->
+<!-- CHECKEN OF JE DE SELECT TAG GELINKT KAN WORDEN IN DE SCRIPT.JS -->
+
 <html>
   <div class="topnav">
     <a class="active" href="html1.html">Charts</a>
       <select>
         <option selected disabled>Choose worldmap category</option>
-        <option value="a">a</option>
-        <option value="b">b</option>
-        <option value="c">c</option>
+        <option value="a">Combustion</option>
+        <option value="b">Geothermal</option>
+        <option value="c">Hydro</option>
+        <option value="d">Nuclear</option>
+        <option value="e">Solar</option>
+        <option value="f">Wind</option>
+        <option value="g">Other</option>
       </select>
-    <!-- </div> -->
     <a href="html2.html">About</a>
     <a href="html3.html">References</a>
   </div>
   <head>
 
-    <h1>Charts</h1><br>
+    <h1>Energy sources visualized</h1><br>
     <h2></h2>
 
   </head>
   <body>
     <script src="http://d3js.org/d3.v5.min.js"></script>
-    <script src="script.js"></script>
     <link rel="stylesheet" type="text/css" href="testcss.css">
 
-    <svg width="2%" heigth="350" class="startpadding"></svg>
-    <svg width="40%" height="350" class="map"></svg>
+    <!-- <svg width="2%" heigth="350" class="startpadding"></svg>
+    <svg width="40%" height="350" class="map"> -->
+      <!-- <g><input id="slider" type="range" min="1980" max="2015" ng-model='year' width=200>
+        <span ng-bind='year'></span></g> -->
+    </svg>
+
+
       <!-- <svg width="500" height="350" id="map"><image xlink:href="file://C:\worldmap.png" alt="image" id="map" height="350" width="500"></svg> -->
-    <svg width="15%" height="350" class="padding1"></svg>
+    <!-- <svg width="15%" height="350" class="padding1"></svg>
     <svg width="40%" height="350" class="pie"></svg>
     <svg width="2%" heigth="350" class="startpadding"></svg>
     <svg width="40%" height="350" class="line1"></svg>
     <svg width="15%" height="350" class="padding2"></svg>
-    <svg width="40%" height="350" class="line2"></svg>
-  <script></script>
+    <svg width="40%" height="350" class="line2"></svg> -->
+    <script src="script.js"></script>
+
 </body>
 </html>
