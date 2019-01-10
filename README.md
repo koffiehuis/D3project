@@ -1,4 +1,4 @@
-# https://github.com/koffiehuis/D3project
+# http(s)://koffiehuis.github.io/D3project
 # Energy sources Visualized
 ##### Credentials
 * Mark van Malestein
