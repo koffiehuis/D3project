@@ -72,7 +72,7 @@ body {
 }
 
 .map {
-  background-image: url(data/worldmap.png);
+  background-image: url(D3project/data/worldmap.png);
   background-size: 100% 100%;
   position: static;
   z-index: -1;
@@ -83,13 +83,13 @@ body {
 }
 
 .pie {
-  background-image: url(data/pie.png);
+  background-image: url(D3project/data/pie.png);
   background-size: 100% 100%;
   position: static;
 }
 
 .line1 {
-  background-image: url(data/figure3.png);
+  background-image: url(D3project/data/figure3.png);
   background-size: 100% 100%;
   position: static;
 }
@@ -100,7 +100,7 @@ body {
 
 
 .line2 {
-  background-image: url(data/figure4.png);
+  background-image: url(D3project/data/figure4.png);
   background-size: 100% 100%;
   position: static;
 }
