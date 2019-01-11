@@ -10,3 +10,10 @@ Prototype: Made a working navbar and included a dropdown selection tag in the na
 
 # Day 4
 Prototype: Implemented the SVG elements in D3 instead of html, made sure the location and size of SVGs is dependent of windowsize. Also implemented a slider (this one is not linked to anything yet). Also, I finished the preprocessing script.
+
+# Day 5
+??? Proceed with the prototype: Took a long time to implement the slider. Also made sure the select-tag values aren't hardcoded and the selected value can be easily accessed. 
+TODO:
+* Make slider pretty
+* Start working with data and implement the charts
+* Check whether more information from dataset can be used. It may be a little bit too boring as it is.
