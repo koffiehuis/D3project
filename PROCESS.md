@@ -18,3 +18,4 @@ TODO:
 * Make slider pretty
 * Start working with data and implement the charts
 * Check whether more information from dataset can be used. It may be a little bit too boring as it is.
+* Add "total" option for years, would be usefull to compare countries, i think.
