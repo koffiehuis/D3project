@@ -9,4 +9,4 @@ Design doc: This day I made a design for my page. I decided to divide the method
 Prototype: Made a working navbar and included a dropdown selection tag in the navbar. This dropdown will be used to choose the category of engery source shown in the world map. Furthermore, I divided the charts page into SVG (in html).
 
 # Day 4
-Prototype: Implemented the SVG elements in D3 instead of html, made sure the location and size of SVGs is dependent of windowsize. Also implemented a slider (this one is not linked to anything yet).
+Prototype: Implemented the SVG elements in D3 instead of html, made sure the location and size of SVGs is dependent of windowsize. Also implemented a slider (this one is not linked to anything yet). Also, I finished the preprocessing script.
