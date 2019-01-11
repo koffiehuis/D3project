@@ -13,6 +13,7 @@ Prototype: Implemented the SVG elements in D3 instead of html, made sure the loc
 
 # Day 5
 ??? Proceed with the prototype: Took a long time to implement the slider. Also made sure the select-tag values aren't hardcoded and the selected value can be easily accessed. 
+
 TODO:
 * Make slider pretty
 * Start working with data and implement the charts
