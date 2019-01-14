@@ -72,8 +72,8 @@ body {
 }
 
 .map {
-  background-image: url(./data/worldmap.png);
-  background-size: 100% 100%;
+  /* background-image: url(worldmap.png);
+  background-size: 100% 100%; */
   position: static;
   z-index: -1;
 }
@@ -82,14 +82,14 @@ body {
   position: static;
 }
 
-.pie {
-  background-image: url(./data/pie.png);
+/* .pie {
+  background-image: url(pie.png);
   background-size: 100% 100%;
   position: static;
-}
+} */
 
 .line1 {
-  background-image: url(./data/figure3.png);
+  background-image: url(figure3.png);
   background-size: 100% 100%;
   position: static;
 }
@@ -100,7 +100,7 @@ body {
 
 
 .line2 {
-  background-image: url(./data/figure4.png);
+  background-image: url(figure4.png);
   background-size: 100% 100%;
   position: static;
 }
