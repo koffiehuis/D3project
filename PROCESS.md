@@ -19,3 +19,6 @@ TODO:
 * Start working with data and implement the charts
 * Check whether more information from dataset can be used. It may be a little bit too boring as it is.
 * Add "total" option for years, would be usefull to compare countries, i think.
+
+# Day 6
+Alpha version: Made filterData(), which returns the data in a usefull format for each figure. Furthermore, implemented a basic piechart. Started with implementing datamaps, but not successfully.
