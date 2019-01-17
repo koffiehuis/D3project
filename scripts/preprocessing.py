@@ -40,6 +40,11 @@ def create_categories(df):
 
     df["categoryTag"] = cat_tags
 
+    # deu = df.loc[df['Country or Area'] == "Germa"]
+    # print(deu)
+
+    # print(df.loc[df['ISO'] == "DEU"])
+
     del df["Commodity - Transaction"]
 
     return df
@@ -48,7 +53,13 @@ def add_id(df):
     with open("country_region.csv", "r", newline="") as csvfile:
         country_dict = {}
         for row in  csv.reader(csvfile, delimiter=","):
-            country_dict[row[8][0:5]] = [row[3], row[10]]
+            if row[10]:
+                if not (row[10][0].isdigit()):
+                    iso_field = row[10]
+                else:
+                    continue
+
+            country_dict[row[8][0:5]] = [row[3], iso_field]
 
     region_list = []
     iso_list = []
@@ -63,8 +74,10 @@ def add_id(df):
     df["Region"] = region_list
     df["ISO"] = iso_list
 
-    del df["Country or Area"]
+    # print(df.loc[df['ISO'] == "DEU"])
 
+    del df["Country or Area"]
+    print(df)
     return df
 
 def write_json(df):
