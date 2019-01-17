@@ -22,3 +22,12 @@ TODO:
 
 # Day 6
 Alpha version: Made filterData(), which returns the data in a usefull format for each figure. Furthermore, implemented a basic piechart. Started with implementing datamaps, but not successfully.
+
+# Day 7
+Alpha version: Trying to fix preprocessing, a lot of data is lost when applying ISO country codes. Also started with line charts.
+
+# Day 8
+Alpha version: Finishing up the line charts and made a start with the worldmap. Was kinda difficult since I implemented the previous one (for dataprocessing) using d3.v3.
+
+# Day 9
+Alpha version: Linking all charts to the select tag and to the year-slider. Having some trouble with the worldmap. it shows the worng countries. Cant seem to find out why.
