@@ -6,14 +6,28 @@ var categoryOption = "Combustion";
 var yearOption = "2014";
 var countryOption = "DEU";
 
-let svgWidth = "40%";
-let svgHeight = "350";
+var svgWidth = document.getElementById("mapDiv").offsetWidth;
+var svgHeight = "350";
 
 colorSheme = ["#1f77b4",  "#ff7f0e", "#17becf", "#8c564b", "black", "#7f7f7f", "#d62728"]
 colorDomain = ["Hydro", "Solar", "Wind", "Combustion", "Nuclear", "Other", "Geothermal"]
 var color = d3.scaleOrdinal(colorSheme)
   // .range(["blue", "green", "yellow"])
   .domain(colorDomain)
+
+  // Delete duplicate code (initialize -> load) (line 2 en pie)
+  // Clear all previous text etc
+  // CHECK fix the worldmap
+  // CHECK legends
+  // Fix dat legend klopt met line colors
+  // colorscheme worldmap
+  // Tooltips
+  // CHECK lines linecharts pretty
+  // Click pie slice -> line2
+  // preprocessing (maybe fix manually) zowel landen als alle categories checken
+  // CHECK bootstrap grid (voor smooth resizing / scaling)
+  // header-comments en normale comments in ALLE files
+  // Geen uitgecommente code!!! strafpunten!!
 
 window.onload = function() {
 
@@ -48,16 +62,41 @@ window.onload = function() {
   });
 };
 
+// $( window ).resize(function() {
+//   $( "#log" ).append( "<div>Handler for .resize() called.</div>" );
+// });
+// window.resize(function() {
+//   console.log("resize")
+// })
+window.onresize = function() {
+  svgWidth = document.getElementById("mapDiv").offsetWidth;
+  initializeMapContainer()
+  initializePieContainer()
+  initializeLine1Container()
+  initializeLine2Container()
+}
+
+// var bb = document.querySelector ('.container')
+//                     .getBoundingClientRect(),
+//        width = bb.right - bb.left;
+//        console.log(width)
+
+
 function initializeMapContainer() {
-  var width = window.innerWidth * .4,
+  d3.select(".svgMap").remove();
+  var width = svgWidth,
   height = "350";
+  // var width =
+
+  // console.log(Object.values(d3.select("#mapDiv"))[0][0])
   var path = d3.geoPath();
 
-  var svgMap = d3.select("body").append("svg")
+  var svgMap = d3.select("#mapDiv").append("svg")
       .attr("width", width)
       .attr("height", height)
-      .attr("transform", `translate(${window.innerWidth * .05} 0)`)
+      // .attr("transform", `translate(${window.innerWidth * .05} 0)`)
       .attr("class", "svgMap")
+      .attr("id", "svgMap")
       .append("g")
       .attr("class", "gMap")
 
@@ -66,8 +105,9 @@ function initializeMapContainer() {
     console.log(value)
 
     var projection = d3.geoMercator()
-                       .scale(130)
-                      .translate( [width / 2, height / 1.5]);
+                       .scale(100)
+                       // .translate( [width / 2, height / 1.5]);
+                       .translate( [width / 2.2, height / 1.5]);
 
     var path = d3.geoPath().projection(projection);
 
@@ -79,131 +119,53 @@ function initializeMapContainer() {
       .append("path")
       .attr("d", path)
       .attr("class", "hier")
-      .on("click", function(geography) {
-        console.log(geography)
+      .on("click", function(d) {
+        countryOption = d.id;
+        loadDataPie();
+        loadDataLine1();
+        console.log(d)
       })
 
     loadDataMap();
 })
 }
 
+
 function loadDataMap() {
   // console.log(getValues(filterData("worldmap")))
   valueArray = [];
-  for (var elem of filterData("worldmap")) {
-    valueArray.push(elem.Quantity)
+  for (var elem of Object.values(filterData("worldmap"))) {
+    valueArray.push(elem)
   }
 
-  // var colorMap = d3.scaleThreshold()
-  //   .domain([0, 60000])
-  //   .range(["rgb(247,251,255)", "rgb(3,19,43)"]);
-  var colorMap = d3.scaleQuantize()
-    .domain([0,600000])
-    .range(["#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598",
-    "#FFFFBF", "#FEE08B", "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"]);
+  var dataMap = filterData("worldmap")
 
-  d3.selectAll(".hier").data(filterData("worldmap")).style("fill", function(d) {
-    return colorMap(d.Quantity)
-  })
+
+  var colorMap = d3.scaleLinear()
+    .domain([0, Math.max.apply(Math, valueArray)])
+    .range(["white", "blue"]);
+  // var colorMap = d3.scaleQuantize()
+  //   .domain([0,600000])
+  //   .range(["#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598",
+  //   "#FFFFBF", "#FEE08B", "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"]);
+
+  d3.selectAll(".hier").style("fill", function(d) {
+    if (!isNaN(dataMap[d.id])) {
+      return colorMap(dataMap[d.id])
+    }
+  });
+
 
 
 }
 
-function initializeMapContainer2() {
 
-  // var colorMap = d3.scaleThreshold()
-  //   .domain([10000,100000,500000,1000000,5000000,10000000,50000000,100000000,500000000,1500000000])
-  //   .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)","rgb(33,113,181)","rgb(8,81,156)","rgb(8,48,107)","rgb(3,19,43)"]);
-  var colorMap = d3.scaleThreshold()
-    .domain([0, 60000])
-    .range(["rgb(247,251,255)", "rgb(3,19,43)"]);
-
-  // var paddingLeft
-  var dataMap = filterData("worldmap")
-  var svgMap = d3.select("body")
-    .append("svg")
-    .attr("id", "choroplethSVG")
-    .attr("width", `${svgWidth}`)
-    .attr("height", `${svgHeight}`)
-    .append("g")
-    .attr("class", "map")
-    .attr("transform", `translate(${window.innerWidth * 0.05} 0)`)
-
-  var projection = d3.geoMercator()
-                     .scale(130)
-                     .translate([0, 0])
-  var path = d3.geoPath().projection(projection);
-
-  // var dataMapById = {};
-  dataMap = filterData("worldmap");
-
-  // dataMap.forEach(function(d) { dataMapById[d.id] = +d.dataMap; });
-  // data.features.forEach(function(d) { d.dataMap = dataMapById[d.id] });
-
-  svgMap.append("g")
-      .attr("class", "countries")
-    .selectAll("path")
-      .data(dataMap)
-    .enter().append("path")
-      .attr("d", path)
-      .style("fill", function(d) {
-        return colorMap(d.Quantity); })
-      .style('stroke', 'white')
-      .style('stroke-width', 1.5)
-      .style("opacity", 0.8)
-      // // tooltips
-      //   .style("stroke","white")
-      //   .style('stroke-width', 0.3)
-      //   .on('mouseover',function(d){
-      //     tip.show(d);
-      //
-      //     d3.select(this)
-      //       .style("opacity", 1)
-      //       .style("stroke","white")
-      //       .style("stroke-width",3);
-      //   })
-      //   .on('mouseout', function(d){
-      //     tip.hide(d);
-      //
-      //     d3.select(this)
-      //       .style("opacity", 0.8)
-      //       .style("stroke","white")
-      //       .style("stroke-width",0.3);
-      //   });
-
-  svgMap.append("path")
-    .data(dataMap)
-    // .data(topojson.mesh(dataMap, function(d) {
-    //   return d
-    // }))
-      // .datum(topojson.mesh(dataMap, function(d) {
-      //   console.log(d)
-      //   return d.ISO; }))
-       // .datum(topojson.mesh(data.features, function(a, b) { return a !== b; }))
-      .attr("class", "names")
-      // .attr("d", path);
-      .attr("d", function(d) {
-        console.log(path)
-      })
-  //
-  // svgMap.append("g")
-  //       .attr("class", "countries")
-  //     .selectAll("path")
-  //     .data({
-  //             USA: {fillKey: "a"},
-  //             NLD: {fillKey: "b"},
-  //           })
-  //
-  //
-  // svgMap.append("path")
-  // // svgMap.call(tip)
-    // .attr("id", "choroplethMap")
-  }
 
 
 function initializePieContainer() {
+  d3.select(".svgPie").remove();
   var dataPie = filterData("pie");
-  var widthPie = window.innerWidth * 0.4,
+  var widthPie = svgWidth,
   // var widthPie = 350,
       heightPie = 350,
       radius = Math.min(widthPie, heightPie) / 3;
@@ -240,14 +202,15 @@ var getAngle = function (d) {
     . value(function(d) { return parseInt(d.Quantity); });
 
 
-  var svgPie = d3.select("body")
+  var svgPie = d3.select("#pieDiv")
     .append("svg")
+    .attr("class", "svgPie")
     .attr("width", `${svgWidth}`)
     .attr("height", `${svgHeight}`)
-    .attr("transform", `translate(${window.innerWidth * 0.15} 0)`)
     // .attr("class", "pie")
     .append("g")
-    .attr("transform", `translate(${window.innerWidth * 0.15} 175)`)
+    .attr("transform", "translate(" + svgWidth / 2 + " " + svgHeight / 2 + ")")
+
 
     var g = svgPie.selectAll(".arc")
        .data(pie(dataPie))
@@ -258,11 +221,27 @@ var getAngle = function (d) {
       .attr("class", "piePath")
        .attr("d", arc)
        .style("fill", function(d) {
-         return color(d.data.categoryTag); });
+         return color(d.data.categoryTag); })
+       .on("click", function(d) {
+         console.log(d.data.categoryTag)
+         categoryOption = d.data.categoryTag;
+         loadDataLine2();
+       })
 
 
    g.append("text")
-       .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")" + "rotate(" + getAngle(d) + ")"; })
+       .style("text-anchor", "end")
+       .attr("transform", function(d) {
+         centroid = labelArc.centroid(d)
+         if (centroid[0] < 0.0) {
+           return "translate(" + centroid + ")" + "rotate(" + (getAngle(d) + 180) + ")";
+
+         }
+         else {
+           d3.select(this).style("text-anchor", "start")
+           return "translate(" + centroid + ")" + "rotate(" + getAngle(d) + ")";
+         }
+       })
        // .attr("dx", ".35em")
        .attr("dy", ".35em")
        .attr("class", "pieText")
@@ -282,7 +261,7 @@ var getAngle = function (d) {
 
 function loadDataPie() {
   // console.log("MAND")
-  var widthPie = window.innerWidth * 0.4,
+  var widthPie = svgWidth,
   // var widthPie = 350,
       heightPie = 350,
       radius = Math.min(widthPie, heightPie) / 3;
@@ -308,16 +287,26 @@ function loadDataPie() {
 
   pieData = pie(filterData("pie"));
 
-
   var getAngle = function (d) {
-    return (180 / Math.PI * (d.startAngle + d.endAngle) / 2 - 90);
+      return (180 / Math.PI * (d.startAngle + d.endAngle) / 2 - 90);
   }
 
   d3.selectAll(".piePath").data(pieData).attr("d", arc).style("fill", function(d) {
     return color(d.data.categoryTag)
   })
   d3.selectAll(".pieText").data(pieData)
-      .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")" + "rotate(" + getAngle(d) + ")"; })
+      .style("text-anchor", "end")
+      .attr("transform", function(d) {
+        centroid = labelArc.centroid(d)
+        if (centroid[0] < 0.0) {
+          return "translate(" + centroid + ")" + "rotate(" + (getAngle(d) + 180) + ")";
+
+        }
+        else {
+          d3.select(this).style("text-anchor", "start")
+          return "translate(" + centroid + ")" + "rotate(" + getAngle(d) + ")";
+        }
+      })
       // .attr("dx", ".35em")
       .attr("dy", ".35em")
       .text(function(d) {
@@ -330,12 +319,17 @@ function loadDataPie() {
       })
       // .text("function(d) { return d.categoryTag; }")
       .style("fill", "#565656")
-      .style("font-weight", "bold");
+      .style("font-weight", "bold")
+      // .style("text-anchor", "end")
+      // .attr("transform", "rotate(180, 225, 225)")
+
 
 }
 
 
 function initializeLine1Container() {
+  d3.select(".line1").remove();
+
 
   var dataLine1 = filterData("line1")
 
@@ -344,148 +338,146 @@ function initializeLine1Container() {
 
   var maxY = Math.max.apply(Math, yValues);
 
-  // console.log((d3.extent(dataLine1[0].values, d => d.Year)))
-  // console.log(maxY)
-  // var minY = Math.min.apply(Math, yValues);
-  // console.log(minY)
-
   var margin = {top: 50, right: 50, left: 50, bottom: 50},
-    widthLine1 = window.innerWidth * 0.4 - margin.left - margin.right,
+    widthLine1 = svgWidth - margin.left - margin.right,
     heightLine1 = 350 - margin.top - margin.bottom;
 
-  var parseTime = d3.timeParse("%Y");
+  // var parseTime = d3.timeParse("%Y");
 
-  var xScale = d3.scaleTime().domain([1990, 2014]).range([0, widthLine1]);
+  var xScale = d3.scaleTime().domain([1990, 2014]).range([0, widthLine1 * .85]);
 
-  var yScale = d3.scaleLinear().domain([0, maxY]).range([heightLine1, 0]);
+  // var yScale = d3.scaleLinear().domain([0, maxY]).range([heightLine1, 0]);
 
-  // var dataset = d3.range(25).map(function(d) {
-  //    return {"y": parseInt(Object.values(dataLine1)[d]), "year": parseInt(Object.keys(dataLine1)[d]) } })
-
-  /// VALUES OF LINES?????????????????????????????
 
   // var line = d3.line()
-  // .x(function(d) {
-  //   // console.log(xScale(d.year))
-  //   return xScale(d.year)})
-  // .y(function(d) { return yScale(d.y)})
-
-  var line = d3.line()
-  .x(d => xScale(d.Year))
-  // .x(function(d) {
-  //   console.log(xScale(d.Year))
-  //   console.log(d.Quantity)
-  //   return(xScale(d.Year))
-  // })
-  .y(d => yScale(d.Quantity));
+  // .x(d => xScale(d.Year))
+  // .y(d => yScale(d.Quantity));
 
 
 
-  var svgLine1 = d3.select("body")
+  var svgLine1 = d3.select("#line1Div")
     .append("svg")
     .attr("width", `${svgWidth}`)
-    .attr("width", "50%")
     .attr("height", `${svgHeight}`)
     .attr("class", "line1")
-    // .attr("transform", `translate(${window.innerWidth * 0.05} ${window.innerHeight * 0.05})`)
-    .attr("transform", `translate(0 ${window.innerHeight * 0.05})`)
     .append("g")
+    .attr("transform", `translate(${svgWidth * 0.1} 0)`)
 
-    // .atrr("transform", "translate/../.,l;dfa")
 
-    // dataLine1.forEach(fcuntion(d) {
-    //   d.date
-    // })
-  // console.log(dataLine1)
 
-  var lines = svgLine1.append("g").attr("class", "lines")
-  lines.selectAll(".line-group")
-    .data(dataLine1).enter()
-    .append('g')
-      .attr('class', 'line-group')
-      .attr("transform", `translate(${window.innerWidth * 0.05} 0)`)
-      // .on("mouseover", function(d, i) {
-      //     svg.append("text")
-      //       .attr("class", "title-text")
-      //       .style("fill", color(i))
-      //       .text(d.name)
-      //       .attr("text-anchor", "middle")
-      //       .attr("x", (width-margin)/2)
-      //       .attr("y", 5);
-      //   })
-      //   .on("mouseout", function(d) {
-      //   svg.select(".title-text").remove();
-      // })
-    .append('path')
-    .attr('class', 'line')
-    .attr('d', d => line(d.values))
-    // .attr("d", function(d) {
-    //   console.log(line(d.values))
-    // })
-    // .attr('d',function(d) {
-    //   console.log(line(d.values))
-    //   console.log(Object.values(d))
-    //   console.log(line(Object.values(d)))
-    //   console.log(line(d["Combustion"]))
-    //   // console.log(line(dataLine1[categoryOption]))
-    //   return line(d["Combustion"])
-    // })
-    .style('stroke', (d, i) => color(i))
-    .style("fill", "transparent")
-    // .style('opacity', lineOpacity)
-    // .on("mouseover", function(d) {
-    //     d3.selectAll('.line')
-  	// 				.style('opacity', otherLinesOpacityHover);
-    //     d3.selectAll('.circle')
-  	// 				.style('opacity', circleOpacityOnLineHover);
-    //     d3.select(this)
-    //       .style('opacity', lineOpacityHover)
-    //       .style("stroke-width", lineStrokeHover)
-    //       .style("cursor", "pointer");
-    //   })
-    // .on("mouseout", function(d) {
-    //     d3.selectAll(".line")
-  	// 				.style('opacity', lineOpacity);
-    //     d3.selectAll('.circle')
-  	// 				.style('opacity', circleOpacity);
-    //     d3.select(this)
-    //       .style("stroke-width", lineStroke)
-    //       .style("cursor", "none");
-    //   });
-    // svgLine1.append("path")
-    //   // .data([filterData("line1")])
-    //   .datum(dataset)
-    //   .attr("class", "line")
-    //   .style("stroke", "black")
-    //   .attr("d", line)
-      // .attr("d", function(d) {
-      //   console.log(d)
-      //   return parseInt(d.Combustion)})
+  svgLine1.append("g").attr("class", "lines")
+  // lines.selectAll(".line-group")
+  //   // .data(dataLine1).enter()
+  //   .append('g')
+  //     .attr('class', 'line-group')
+  //
+  //   .append('path')
+  //   .attr('class', 'lineLine1')
+    // .attr('d', d => line(d.values))
+    //
+    // .style('stroke', (d, i) => color(i))
+    // .style("stroke-width", "3px")
+    // .style("fill", "transparent")
+
   var xAxis = d3.axisBottom(xScale).ticks(5).tickFormat(d3.format("0"));
 
-  var yAxis = d3.axisLeft(yScale).ticks(5);
+  // var yAxis = d3.axisLeft(yScale).ticks(5);
 
 
   svgLine1.append("g")
-    .attr("class", "x axis")
-    .attr("transform", `translate(${window.innerWidth * 0.05} ${heightLine1})`)
+    .attr("class", "xAxis1")
+    .attr("transform", `translate(0 ${heightLine1})`)
     .call(xAxis);
 
-  svgLine1.select(".x axis").selectAll("text").style("font-size", "1px")
-
   svgLine1.append("g")
-    .attr("transform", `translate(${window.innerWidth * 0.05} 0)`)
-    .attr("class", "y axis")
-    .call(yAxis)
+    .attr("class", "yAxis1")
     .append('text')
     .attr("y", 15)
     .attr("transform", "rotate(-90)")
     .attr("fill", "#000")
-    .text("Total values");
+    .text("kWh");
+  loadDataLine1();
+  }
+
+
+function loadDataLine1() {
+  var dataLine1 = filterData("line1")
+
+  var yValues = getValues(dataLine1, categoryOption);
+
+
+  var maxY = Math.max.apply(Math, yValues);
+
+
+  var margin = {top: 50, right: 50, left: 50, bottom: 50},
+    widthLine1 = svgWidth - margin.left - margin.right,
+    heightLine1 = 350 - margin.top - margin.bottom;
+
+  var parseTime = d3.timeParse("%Y");
+
+  var xScale = d3.scaleTime().domain([1990, 2014]).range([0, widthLine1 * .85]);
+
+  var yScale = d3.scaleLinear().domain([0, maxY]).range([heightLine1, 0]);
+
+  var line = d3.line()
+  .x(d => xScale(d.Year))
+  .y(d => yScale(d.Quantity));
+  //
+  // d3.selectAll(".line-group").data(dataLine1).enter().
+  var lines = d3.select(".lines")
+  lines.selectAll(".line-group")
+    .data(dataLine1).enter()
+    .append('g')
+      .attr('class', 'line-group')
+
+    .append('path')
+    .attr('class', 'lineLine1')
+
+  d3.selectAll(".lineLine1").data(dataLine1)
+    .attr('d', d => line(d.values))
+    .style('stroke', (d, i) => color(i))
+    .style("stroke-width", "3px")
+    .style("fill", "transparent")
+
+  var yAxis = d3.axisLeft(yScale).ticks(5);
+
+  d3.select(".yAxis1").call(yAxis)
+
+  var legend = d3.select(".line1").selectAll(".legend1")
+    .data(dataLine1)
+    .enter()
+    .append("text")
+    .attr("class", "legend1")
+   .text(function(d) {
+      console.log(d)
+      return d.cat})
+    .attr("x", 100)
+    .attr("y", 9)
+    .attr("dy", ".40em")
+    .style("text-anchor", "start")
+    .attr("transform", function(d, i) {
+      return "translate(" + svgWidth * 0.71 + " " + i * 20 + ")";
+    });
+
+  var legendRects = d3.select(".line1").selectAll(".legend-rect")
+    .append("rect")
+    .attr("class", "legend-rect")
+    .data(dataLine1)
+    .enter()
+    .append("rect")
+      .attr("x", 20)
+      .attr("width", 20)
+      .attr("height", 20)
+      .style("fill", function(d) { return color(d.cat) })
+      .attr("transform", function(d, i) {
+        return "translate(" + svgWidth * 0.80 + " " + i * 20 + ")";
+      });
   }
 
 
 function initializeLine2Container() {
+    d3.select(".line2").remove();
+
     var dataLine2 = filterData("line2")
 
     var yValues = getValues(dataLine2, categoryOption);
@@ -493,18 +485,13 @@ function initializeLine2Container() {
 
     var maxY = Math.max.apply(Math, yValues);
 
-    // console.log((d3.extent(dataLine1[0].values, d => d.Year)))
-    // console.log(maxY)
-    // var minY = Math.min.apply(Math, yValues);
-    // console.log(minY)
-
     var margin = {top: 50, right: 50, left: 50, bottom: 50},
-      widthLine2 = window.innerWidth * 0.4 - margin.left - margin.right,
+      widthLine2 = svgWidth - margin.left - margin.right,
       heightLine2 = 350 - margin.top - margin.bottom;
 
     var parseTime = d3.timeParse("%Y");
 
-    var xScale = d3.scaleTime().domain([1990, 2014]).range([0, widthLine2]);
+    var xScale = d3.scaleTime().domain([1990, 2014]).range([0, widthLine2 * .85]);
 
     var yScale = d3.scaleLinear().domain([0, maxY]).range([heightLine2, 0]);
 
@@ -514,85 +501,32 @@ function initializeLine2Container() {
 
 
 
-    var svgLine2 = d3.select("body")
+    var svgLine2 = d3.select("#line2Div")
       .append("svg")
       .attr("width", `${svgWidth}`)
-      .attr("width", "50%")
       .attr("height", `${svgHeight}`)
       .attr("class", "line2")
-      .attr("transform", `translate(0 ${window.innerHeight * 0.05})`)
+      // .attr("transform", `translate(0 ${window.innerHeight * 0.05})`)
       .append("g")
+      .attr("transform", `translate(${svgWidth * 0.1} 0)`)
 
-      // .atrr("transform", "translate/../.,l;dfa")
 
-      // dataLine1.forEach(fcuntion(d) {
-      //   d.date
-      // })
-    // console.log(dataLine2)
 
     var lines = svgLine2.append("g").attr("class", "lines")
     lines.selectAll(".line-group")
       .data(dataLine2).enter()
       .append('g')
         .attr('class', 'line-group')
-        .attr("transform", `translate(${window.innerWidth * 0.05} 0)`)
-        // .on("mouseover", function(d, i) {
-        //     svg.append("text")
-        //       .attr("class", "title-text")
-        //       .style("fill", color(i))
-        //       .text(d.name)
-        //       .attr("text-anchor", "middle")
-        //       .attr("x", (width-margin)/2)
-        //       .attr("y", 5);
-        //   })
-        //   .on("mouseout", function(d) {
-        //   svg.select(".title-text").remove();
-        // })
+        // .attr("transform", `translate(0 100)`)
+
       .append('path')
       .attr('class', 'PathLine2')
       .attr('d', d => line2(d.values))
-      // .attr("d", function(d) {
-      //   console.log(line2(d.values))
-      // })
-      // .attr('d',function(d) {
-      //   console.log(line(d.values))
-      //   console.log(Object.values(d))
-      //   console.log(line(Object.values(d)))
-      //   console.log(line(d["Combustion"]))
-      //   // console.log(line(dataLine1[categoryOption]))
-      //   return line(d["Combustion"])
-      // })
+
       .style('stroke', (d, i) => color(i))
+      .style("stroke-width", "3px")
       .style("fill", "transparent")
-      // .style('opacity', lineOpacity)
-      // .on("mouseover", function(d) {
-      //     d3.selectAll('.line')
-      // 				.style('opacity', otherLinesOpacityHover);
-      //     d3.selectAll('.circle')
-      // 				.style('opacity', circleOpacityOnLineHover);
-      //     d3.select(this)
-      //       .style('opacity', lineOpacityHover)
-      //       .style("stroke-width", lineStrokeHover)
-      //       .style("cursor", "pointer");
-      //   })
-      // .on("mouseout", function(d) {
-      //     d3.selectAll(".line")
-      // 				.style('opacity', lineOpacity);
-      //     d3.selectAll('.circle')
-      // 				.style('opacity', circleOpacity);
-      //     d3.select(this)
-      //       .style("stroke-width", lineStroke)
-      //       .style("cursor", "none");
-      //   });
-      // svgLine1.append("path")
-      //   // .data([filterData("line1")])
-      //   .datum(dataset)
-      //   .attr("class", "line")
-      //   .style("stroke", "black")
-      //   .attr("d", line)
-        // .attr("d", function(d) {
-        //   console.log(d)
-        //   return parseInt(d.Combustion)})
+
     var xAxis = d3.axisBottom(xScale).ticks(5).tickFormat(d3.format("0"));
 
     var yAxis = d3.axisLeft(yScale).ticks(5);
@@ -600,13 +534,11 @@ function initializeLine2Container() {
 
     svgLine2.append("g")
       .attr("class", "xAxis2")
-      .attr("transform", `translate(${window.innerWidth * 0.05} ${heightLine2})`)
+      .attr("transform", `translate(0 ${heightLine2})`)
       .call(xAxis);
 
-    // svgLine2.select(".xAxis2").selectAll("text").style("font-size", "1px")
-
     svgLine2.append("g")
-      .attr("transform", `translate(${window.innerWidth * 0.05} 0)`)
+      // .attr("transform", `translate(${window.innerWidth * 0.05} 0)`)
       .attr("class", "yAxis2")
       .call(yAxis)
       .append('text')
@@ -615,12 +547,13 @@ function initializeLine2Container() {
       .attr("fill", "#000")
       .text("kWh");
 
+      loadDataLine2();
 }
 
 
 function loadDataLine2() {
   var margin = {top: 50, right: 50, left: 50, bottom: 50},
-    widthLine2 = window.innerWidth * 0.4 - margin.left - margin.right,
+    widthLine2 = svgWidth - margin.left - margin.right,
     heightLine2 = 350 - margin.top - margin.bottom;
 
   var dataLine2 = filterData("line2");
@@ -632,31 +565,79 @@ function loadDataLine2() {
 
   var parseTime = d3.timeParse("%Y");
 
-  var xScale = d3.scaleTime().domain([1990, 2014]).range([0, widthLine2]);
+  var xScale = d3.scaleTime().domain([1990, 2014]).range([0, widthLine2 * 0.85]);
 
   var yScale = d3.scaleLinear().domain([0, maxY]).range([heightLine2, 0]);
 
   var line2 = d3.line()
   .x(d => xScale(d.Year))
-  // .x(function(d) {
-  //   console.log(xScale(d.Year))
-  //   console.log(yScale(d.Quantity))
-  //   return(xScale(d.Year))
-  // })
   .y(d => yScale(d.Quantity));
 
   var yAxis = d3.axisLeft(yScale).ticks(5);
 
-  // var xAxis = d3.axisBottom(xScale).ticks(5).tickFormat(d3.format("0"));
+  regionColors = ["#283747", "#F1C40F", "#2471A3", "#229954", "#BA4A00"]
+
 
   d3.selectAll(".PathLine2").data(dataLine2).attr('d', d => line2(d.values))
-  // d3.select(".xAxis2").call(xAxis)
+    .style("stroke", function (d, i) { return regionColors[i] } )
+
   d3.select(".yAxis2").call(yAxis)
+
+  var legend = d3.select(".line2").selectAll(".legend2")
+    .data(dataLine2)
+    .enter()
+    .append("text")
+    .attr("class", "legend2")
+   .text(function(d) {
+      console.log(d)
+      return d.region})
+    .attr("x", 100)
+    .attr("y", 9)
+    .attr("dy", ".40em")
+    .style("text-anchor", "start")
+    .attr("transform", function(d, i) {
+      return "translate(" + svgWidth * 0.71 + " " + i * 20 + ")";
+    });
+
+
+
+  var legendRects = d3.select(".line2").selectAll(".legend-rect")
+    .append("rect")
+    .attr("class", "legend-rect")
+    .data(dataLine2)
+    .enter()
+    .append("rect")
+      .attr("x", 20)
+      .attr("width", 20)
+      .attr("height", 20)
+      .style("fill", function(d, i) {
+        return regionColors[i]
+      })
+      .attr("transform", function(d, i) {
+        return "translate(" + svgWidth * 0.80 + " " + i * 20 + ")";
+      });
+
+  d3.select("#line2Div").append("text")
+      .attr("text-anchor", "middle")
+      // .attr("transform", `translate(500 ${svgHeight})`)
+      // .attr("transform", `translate(${svgWidth / 2}, ${-margin.top / 2})`)
+      .style("font-size", "16px")
+      .style("text-decoration", "underline")
+      .attr("id", "titleLine2")
+
+  d3.select("#titleLine2")
+    .text(`Graph showing ${categoryOption} per region over time`)
+    // .attr("transform", `translate(${svgWidth / 2} ${svgHeight / 2})`)
+    .attr("transform", `translate(-200 0)`)
 }
 
 
 function initializeSlider() {
-  var sliderP = d3.select("body").append("p").attr("class", "mand").style("position", "absolute").style("top", "200px").style("right", `${window.innerWidth * 0.1}`)
+  var sliderP = d3.select("#mapDiv").append("p").attr("class", "mand")
+  .style("position", "absolute")
+  // .style("top", "svgHeight")
+  .style("top", "0px")
+  // .style("right", `${window.innerWidth * 0.1}`)
   var slider = sliderP.append("input")
     .attr("class", "slider")
     .attr("type", "range")
@@ -720,9 +701,14 @@ function initializeSlider() {
 function filterData(spec) {
   var allData = data[0]
   if (spec == "worldmap") {
+    regionDict = {};
     var groupCategory = _.groupBy(allData, obj => obj.categoryTag);
-    groupCategory = _.groupBy(groupCategory[categoryOption], obj => obj.Year);
-    return groupCategory[yearOption]
+    groupYear = _.groupBy(groupCategory[categoryOption], obj => obj.Year);
+    groupRegion = _.groupBy(groupYear[yearOption], obj => obj.ISO);
+    for (var region of Object.values(groupRegion)) {
+      regionDict[region[0].ISO] =  region[0].Quantity;
+    }
+    return regionDict;
   }
 
   else if (spec == "pie") {
@@ -731,32 +717,8 @@ function filterData(spec) {
     return groupISO[yearOption]
   }
 
-  // else if (spec == "line1") {
-  //   var groupCountry = _.groupBy(allData, obj => obj.ISO);
-  //   var groupYear = _.groupBy(groupCountry[countryOption], obj => obj.Year);
-  //
-  //   var yearDict = {};
-  //   for (var year of Object.values(groupYear)) {
-  //     var categoryDict = {}
-  //     var groupCategory =  _.groupBy(year, obj => obj.categoryTag);
-  //     for (var category of Object.values(groupCategory)) {
-  //       for (var country of Object.values(category)) {
-  //         if (!isNaN(categoryDict[country.categoryTag])) {
-  //           categoryDict[country.categoryTag] = parseInt(categoryDict[country.categoryTag]) + parseInt(country.Quantity)
-  //         }
-  //         else {
-  //           categoryDict[country.categoryTag] = parseInt(country.Quantity)
-  //         }
-  //       }
-  //     }
-  //     yearDict[year[0].Year] = categoryDict
-  //   }
-  //   console.log(yearDict)
-  //   return yearDict
-  // }
   else if  (spec == "line1") {
     var groupCountry = _.groupBy(allData, obj => obj.ISO);
-    // console.log(groupCountry[countryOption])
     var groupCategory = _.groupBy(groupCountry[countryOption], obj => obj.categoryTag);
     array = [];
     for (var index in Object.values(groupCategory)) {
@@ -768,30 +730,23 @@ function filterData(spec) {
 
   else if (spec == "line2") {
     var groupCategory = _.groupBy(allData, obj => obj.categoryTag);
-    // var groupYear = _.groupBy(groupCategory[categoryOption], obj => obj.Year)
     totalArray = [];
     var groupRegion =  _.groupBy(groupCategory[categoryOption], obj => obj.Region);
     for (var index in Object.values(groupRegion)) {
       regionArray = [];
       key = Object.keys(groupRegion)[index]
       value = Object.values(groupRegion)[index]
-      // console.log(value)
       var groupYear =  _.groupBy(value, obj => obj.Year);
       for (var yearIndex in groupYear) {
         sum = 0;
         for (var elem of groupYear[yearIndex]) {
           sum += elem.Quantity
         }
-        // regionDict[yearIndex] = sum
         regionArray.push({"Year": parseInt(yearIndex), "Quantity": sum})
       }
-      // if (!isNaN(yearDict[key])) {
-      //   yearDict[key] = yearDicht[key].Quantity + value.Quantity
-      // }
-      // else {
-      //   yearDict[key] = value.Quantity
-      // }
-      totalArray.push({"region": Object.keys(groupRegion)[index], "values": regionArray})
+      if (Object.keys(groupRegion)[index] != "null") {
+        totalArray.push({"region": Object.keys(groupRegion)[index], "values": regionArray})
+      }
     }
     return totalArray;
   }

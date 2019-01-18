@@ -75,7 +75,6 @@ body {
   /* background-image: url(worldmap.png);
   background-size: 100% 100%; */
   position: static;
-  z-index: -1;
 }
 
 .padding1 {
@@ -97,6 +96,8 @@ body {
 .padding2 {
   position: static;
 }
+
+.top-buffer { margin-top: 50px; }
 
 
 /* .line2 {
