@@ -31,3 +31,6 @@ Alpha version: Finishing up the line charts and made a start with the worldmap. 
 
 # Day 9
 Alpha version: Linking all charts to the select tag and to the year-slider. Having some trouble with the worldmap. it shows the worng countries. Cant seem to find out why.
+
+# Day 10
+Alpha version: Fixed worldmap, added legends (buggy), linked piechart to figure4, implemented bootstrap for resizing page and content
