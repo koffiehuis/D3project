@@ -15,19 +15,29 @@ var color = d3.scaleOrdinal(colorSheme)
   // .range(["blue", "green", "yellow"])
   .domain(colorDomain)
 
+function color2(d) {
+  i = colorDomain.indexOf(d)
+  return colorSheme[i]
+}
+
   // Delete duplicate code (initialize -> load) (line 2 en pie)
-  // Clear all previous text etc
+  // CHECK Clear all previous text etc (debuggen van piechart labels en lines legends) x
   // CHECK fix the worldmap
   // CHECK legends
-  // Fix dat legend klopt met line colors
-  // colorscheme worldmap
-  // Tooltips
-  // CHECK lines linecharts pretty
-  // Click pie slice -> line2
+  // Fix dat legend klopt met line colors x
+  // CHECK colorscheme worldmap x
+  // CHECK Tooltips x (1/2)
+  // CHECK lines linecharts pretty  x
+  // CHECK Click pie slice -> line2 x
+  // CHECK Add titles to charts
+
   // preprocessing (maybe fix manually) zowel landen als alle categories checken
+  // duplicates verwijderen tijdens preprocessing (china honkong etc)
+
   // CHECK bootstrap grid (voor smooth resizing / scaling)
   // header-comments en normale comments in ALLE files
   // Geen uitgecommente code!!! strafpunten!!
+  // CHECK Show starting value of slider x
 
 window.onload = function() {
 
@@ -42,17 +52,17 @@ window.onload = function() {
       data.push(dataArray);
 
   data2.push(convert())
-  // console.log(data)
-  // console.log(data2)
   // dataArray = processingfunctie(response);
   // processedData = dataArray;
+  initializeTitles()
+  addTitles()
   initializeMapContainer()
   initializePieContainer()
   initializeLine1Container()
   initializeLine2Container()
   initializeSlider()
 
-  // console.log(filterData("line1"))
+
   // makeMapChart()
 
 
@@ -62,12 +72,7 @@ window.onload = function() {
   });
 };
 
-// $( window ).resize(function() {
-//   $( "#log" ).append( "<div>Handler for .resize() called.</div>" );
-// });
-// window.resize(function() {
-//   console.log("resize")
-// })
+
 window.onresize = function() {
   svgWidth = document.getElementById("mapDiv").offsetWidth;
   initializeMapContainer()
@@ -76,11 +81,6 @@ window.onresize = function() {
   initializeLine2Container()
 }
 
-// var bb = document.querySelector ('.container')
-//                     .getBoundingClientRect(),
-//        width = bb.right - bb.left;
-//        console.log(width)
-
 
 function initializeMapContainer() {
   d3.select(".svgMap").remove();
@@ -88,7 +88,6 @@ function initializeMapContainer() {
   height = "350";
   // var width =
 
-  // console.log(Object.values(d3.select("#mapDiv"))[0][0])
   var path = d3.geoPath();
 
   var svgMap = d3.select("#mapDiv").append("svg")
@@ -102,7 +101,6 @@ function initializeMapContainer() {
 
   var topojson = Promise.resolve(d3.json("world_countries.json"));
   topojson.then(function(value) {
-    console.log(value)
 
     var projection = d3.geoMercator()
                        .scale(100)
@@ -123,7 +121,7 @@ function initializeMapContainer() {
         countryOption = d.id;
         loadDataPie();
         loadDataLine1();
-        console.log(d)
+        addTitles();
       })
 
     loadDataMap();
@@ -132,7 +130,6 @@ function initializeMapContainer() {
 
 
 function loadDataMap() {
-  // console.log(getValues(filterData("worldmap")))
   valueArray = [];
   for (var elem of Object.values(filterData("worldmap"))) {
     valueArray.push(elem)
@@ -140,6 +137,19 @@ function loadDataMap() {
 
   var dataMap = filterData("worldmap")
 
+  // var div = d3.select("body").append("div")
+  //     .attr("class", "tooltip")
+  //     .style("opacity", 0);
+
+  var toolTip = d3.tip()
+    .attr("class", "toolTip")
+    .offset([-10, 0])
+    .html(function(d) {
+      return "<span class='toolInfo'>" + d.id + "<br/>" + dataMap[d.id] + "</span>";
+    })
+    // .style("left", d3.select(this).attr("cx") + "px")
+    // .style("top", d3.select(this).attr("cy") + "px");
+  d3.select(".svgMap").call(toolTip)
 
   var colorMap = d3.scaleLinear()
     .domain([0, Math.max.apply(Math, valueArray)])
@@ -153,13 +163,21 @@ function loadDataMap() {
     if (!isNaN(dataMap[d.id])) {
       return colorMap(dataMap[d.id])
     }
-  });
+  })
+  // TRANSITIONS
+  .on("mouseover", function(d) {
+    toolTip.show(d)
+      .style("left", `${d3.event.pageX}px`)
+      .style("top", `${d3.event.pageY - 50}px`)
+  })
+  .on("mouseout", function() {
+    toolTip.hide()
+  })
+
 
 
 
 }
-
-
 
 
 function initializePieContainer() {
@@ -208,59 +226,58 @@ var getAngle = function (d) {
     .attr("width", `${svgWidth}`)
     .attr("height", `${svgHeight}`)
     // .attr("class", "pie")
-    .append("g")
-    .attr("transform", "translate(" + svgWidth / 2 + " " + svgHeight / 2 + ")")
+    // .append("g")
+    // .attr("transform", "translate(" + svgWidth / 2 + " " + svgHeight / 2 + ")");
 
 
-    var g = svgPie.selectAll(".arc")
-       .data(pie(dataPie))
-     .enter().append("g")
-       .attr("class", "arc");
-
-   g.append("path")
-      .attr("class", "piePath")
-       .attr("d", arc)
-       .style("fill", function(d) {
-         return color(d.data.categoryTag); })
-       .on("click", function(d) {
-         console.log(d.data.categoryTag)
-         categoryOption = d.data.categoryTag;
-         loadDataLine2();
-       })
-
-
-   g.append("text")
-       .style("text-anchor", "end")
-       .attr("transform", function(d) {
-         centroid = labelArc.centroid(d)
-         if (centroid[0] < 0.0) {
-           return "translate(" + centroid + ")" + "rotate(" + (getAngle(d) + 180) + ")";
-
-         }
-         else {
-           d3.select(this).style("text-anchor", "start")
-           return "translate(" + centroid + ")" + "rotate(" + getAngle(d) + ")";
-         }
-       })
-       // .attr("dx", ".35em")
-       .attr("dy", ".35em")
-       .attr("class", "pieText")
-       .text(function(d) {
-         if (parseInt(d.data.Quantity) > 200){
-           return d.data.categoryTag;
-         }
-          else {
-            return " ";
-          }
-       })
-       // .text("function(d) { return d.categoryTag; }")
-       .style("fill", "#565656")
-       .style("font-weight", "bold");
+   //  var g = svgPie.selectAll(".arc")
+   //     .data(pie(dataPie))
+   //   .enter().append("g")
+   //     .attr("class", "arc");
+   //
+   // g.append("path")
+   //    .attr("class", "piePath")
+   //     .attr("d", arc)
+   //     .style("fill", function(d) {
+   //       return color(d.data.categoryTag); })
+   //     .on("click", function(d) {
+   //       categoryOption = d.data.categoryTag;
+   //       loadDataLine2();
+   //     })
+   //
+   //
+   // g.append("text")
+   //     .style("text-anchor", "end")
+   //     .attr("transform", function(d) {
+   //       centroid = labelArc.centroid(d)
+   //       if (centroid[0] < 0.0) {
+   //         return "translate(" + centroid + ")" + "rotate(" + (getAngle(d) + 180) + ")";
+   //
+   //       }
+   //       else {
+   //         d3.select(this).style("text-anchor", "start")
+   //         return "translate(" + centroid + ")" + "rotate(" + getAngle(d) + ")";
+   //       }
+   //     })
+   //     // .attr("dx", ".35em")
+   //     .attr("dy", ".35em")
+   //     .attr("class", "pieText")
+   //     .text(function(d) {
+   //       if (parseInt(d.data.Quantity) > 200){
+   //         return d.data.categoryTag;
+   //       }
+   //        else {
+   //          return " ";
+   //        }
+   //     })
+   //     // .text("function(d) { return d.categoryTag; }")
+   //     .style("fill", "#565656")
+   //     .style("font-weight", "bold");
+   loadDataPie()
 }
 
 
 function loadDataPie() {
-  // console.log("MAND")
   var widthPie = svgWidth,
   // var widthPie = 350,
       heightPie = 350,
@@ -291,38 +308,97 @@ function loadDataPie() {
       return (180 / Math.PI * (d.startAngle + d.endAngle) / 2 - 90);
   }
 
-  d3.selectAll(".piePath").data(pieData).attr("d", arc).style("fill", function(d) {
-    return color(d.data.categoryTag)
-  })
-  d3.selectAll(".pieText").data(pieData)
-      .style("text-anchor", "end")
-      .attr("transform", function(d) {
-        centroid = labelArc.centroid(d)
-        if (centroid[0] < 0.0) {
-          return "translate(" + centroid + ")" + "rotate(" + (getAngle(d) + 180) + ")";
+  // TOOLTIP SHIZZLE MAAR EERST MAP MOOIMAKEN ZODAT JE STYLE KAN KOPIEREN
+  // d3.selectAll(".piePath").on("mouseover", function(d) {
+  // })
 
-        }
+  d3.selectAll(".arc").remove()
+
+  var g = d3.select(".svgPie").selectAll(".arc")
+     .data(pieData)
+   .enter().append("g")
+     .attr("class", "arc")
+     .attr("transform", "translate(" + svgWidth / 2 + " " + svgHeight / 2 + ")");
+
+
+
+  g.append("path")
+    .attr("class", "piePath")
+     .attr("d", arc)
+     .style("fill", function(d) {
+       return color(d.data.categoryTag); })
+     .on("click", function(d) {
+       categoryOption = d.data.categoryTag;
+       loadDataLine2();
+       addTitles();
+     })
+
+
+  g.append("text")
+     .style("text-anchor", "end")
+     .attr("transform", function(d) {
+       centroid = labelArc.centroid(d)
+       if (centroid[0] < 0.0) {
+         return "translate(" + centroid + ")" + "rotate(" + (getAngle(d) + 180) + ")";
+
+       }
+       else {
+         d3.select(this).style("text-anchor", "start")
+         return "translate(" + centroid + ")" + "rotate(" + getAngle(d) + ")";
+       }
+     })
+     // .attr("dx", ".35em")
+     .attr("dy", ".35em")
+     .attr("class", "pieText")
+     .text(function(d) {
+       if (parseInt(d.data.Quantity) > 200){
+         return d.data.categoryTag;
+       }
         else {
-          d3.select(this).style("text-anchor", "start")
-          return "translate(" + centroid + ")" + "rotate(" + getAngle(d) + ")";
+          return " ";
         }
-      })
-      // .attr("dx", ".35em")
-      .attr("dy", ".35em")
-      .text(function(d) {
-        if (parseInt(d.data.Quantity) > 200){
-          return d.data.categoryTag;
-        }
-         else {
-           return " ";
-         }
-      })
-      // .text("function(d) { return d.categoryTag; }")
-      .style("fill", "#565656")
-      .style("font-weight", "bold")
-      // .style("text-anchor", "end")
-      // .attr("transform", "rotate(180, 225, 225)")
+     })
+     // .text("function(d) { return d.categoryTag; }")
+     .style("fill", "#565656")
+     .style("font-weight", "bold");
 
+
+  // var g = d3.select(".arc")
+  //
+  // d3.selectAll(".piePath").data(pieData).attr("d", arc).style("fill", function(d) {
+  //   return color(d.data.categoryTag)
+  // })
+  //
+  //
+  // d3.selectAll(".pieText").data(pieData)
+  //     .style("text-anchor", "end")
+  //     .attr("transform", function(d) {
+  //       centroid = labelArc.centroid(d)
+  //       if (centroid[0] < 0.0) {
+  //         return "translate(" + centroid + ")" + "rotate(" + (getAngle(d) + 180) + ")";
+  //
+  //       }
+  //       else {
+  //         d3.select(this).style("text-anchor", "start")
+  //         return "translate(" + centroid + ")" + "rotate(" + getAngle(d) + ")";
+  //       }
+  //     })
+  //     // .attr("dx", ".35em")
+  //     .attr("dy", ".35em")
+  //     .text(function(d) {
+  //       if (parseInt(d.data.Quantity) > 200){
+  //         return d.data.categoryTag;
+  //       }
+  //        else {
+  //          return " ";
+  //        }
+  //     })
+  //     // .text("function(d) { return d.categoryTag; }")
+  //     .style("fill", "#565656")
+  //     .style("font-weight", "bold")
+  //     // .style("text-anchor", "end")
+  //     // .attr("transform", "rotate(180, 225, 225)")
+  //
 
 }
 
@@ -401,6 +477,8 @@ function initializeLine1Container() {
 
 
 function loadDataLine1() {
+  d3.select(".line-group").remove()
+
   var dataLine1 = filterData("line1")
 
   var yValues = getValues(dataLine1, categoryOption);
@@ -433,9 +511,14 @@ function loadDataLine1() {
     .append('path')
     .attr('class', 'lineLine1')
 
+
+
   d3.selectAll(".lineLine1").data(dataLine1)
     .attr('d', d => line(d.values))
-    .style('stroke', (d, i) => color(i))
+    // .style('stroke', (d, i) => color(i))
+    .style('stroke', function(d) {
+      return color2(d.cat)
+    })
     .style("stroke-width", "3px")
     .style("fill", "transparent")
 
@@ -443,20 +526,21 @@ function loadDataLine1() {
 
   d3.select(".yAxis1").call(yAxis)
 
+  d3.selectAll(".colorRect").remove()
+  d3.selectAll(".legend1").remove()
+
   var legend = d3.select(".line1").selectAll(".legend1")
     .data(dataLine1)
     .enter()
     .append("text")
     .attr("class", "legend1")
-   .text(function(d) {
-      console.log(d)
-      return d.cat})
+   .text(function(d) { return d.cat})
     .attr("x", 100)
     .attr("y", 9)
     .attr("dy", ".40em")
     .style("text-anchor", "start")
     .attr("transform", function(d, i) {
-      return "translate(" + svgWidth * 0.71 + " " + i * 20 + ")";
+      return "translate(" + svgWidth * 0.73 + " " + i * 20 + ")";
     });
 
   var legendRects = d3.select(".line1").selectAll(".legend-rect")
@@ -465,10 +549,14 @@ function loadDataLine1() {
     .data(dataLine1)
     .enter()
     .append("rect")
+      .attr("class", "colorRect")
       .attr("x", 20)
       .attr("width", 20)
       .attr("height", 20)
-      .style("fill", function(d) { return color(d.cat) })
+      .style("fill", function(d) {
+        console.log(d)
+        console.log(color2(d.cat));
+        return color2(d.cat) })
       .attr("transform", function(d, i) {
         return "translate(" + svgWidth * 0.80 + " " + i * 20 + ")";
       });
@@ -589,14 +677,13 @@ function loadDataLine2() {
     .append("text")
     .attr("class", "legend2")
    .text(function(d) {
-      console.log(d)
       return d.region})
     .attr("x", 100)
     .attr("y", 9)
     .attr("dy", ".40em")
     .style("text-anchor", "start")
     .attr("transform", function(d, i) {
-      return "translate(" + svgWidth * 0.71 + " " + i * 20 + ")";
+      return "translate(" + svgWidth * 0.73 + " " + i * 20 + ")";
     });
 
 
@@ -617,18 +704,18 @@ function loadDataLine2() {
         return "translate(" + svgWidth * 0.80 + " " + i * 20 + ")";
       });
 
-  d3.select("#line2Div").append("text")
-      .attr("text-anchor", "middle")
-      // .attr("transform", `translate(500 ${svgHeight})`)
-      // .attr("transform", `translate(${svgWidth / 2}, ${-margin.top / 2})`)
-      .style("font-size", "16px")
-      .style("text-decoration", "underline")
-      .attr("id", "titleLine2")
-
-  d3.select("#titleLine2")
-    .text(`Graph showing ${categoryOption} per region over time`)
-    // .attr("transform", `translate(${svgWidth / 2} ${svgHeight / 2})`)
-    .attr("transform", `translate(-200 0)`)
+  // d3.select("#line2Div").append("text")
+  //     .attr("text-anchor", "middle")
+  //     // .attr("transform", `translate(500 ${svgHeight})`)
+  //     // .attr("transform", `translate(${svgWidth / 2}, ${-margin.top / 2})`)
+  //     .style("font-size", "16px")
+  //     .style("text-decoration", "underline")
+  //     .attr("id", "titleLine2")
+  //
+  // d3.select("#titleLine2")
+  //   .text(`Graph showing ${categoryOption} per region over time`)
+  //   // .attr("transform", `translate(${svgWidth / 2} ${svgHeight / 2})`)
+  //   .attr("transform", `translate(-200 0)`)
 }
 
 
@@ -636,19 +723,23 @@ function initializeSlider() {
   var sliderP = d3.select("#mapDiv").append("p").attr("class", "mand")
   .style("position", "absolute")
   // .style("top", "svgHeight")
-  .style("top", "0px")
+  .style("top", "25px")
   // .style("right", `${window.innerWidth * 0.1}`)
   var slider = sliderP.append("input")
     .attr("class", "slider")
     .attr("type", "range")
     .attr("id", "mySlider")
     .attr("min", "1995")
-    .attr("max", "2015")
-    .on("change", function(d) {
+    .attr("max", "2014")
+    // .style("top", "20px")
+    document.getElementById("mySlider").defaultValue = 2000;
+
+    slider.on("change", function(d) {
       showSliderValue(mySlider.value)
       yearOption = mySlider.value;
       loadDataMap()
       loadDataPie();
+      addTitles();
       return mySlider.value
     })
 
@@ -657,13 +748,14 @@ function initializeSlider() {
     // .attr("transform", `translate(${window.innerWidth * 0.05} ${window.innerHeight * 0.05})`)
     // .style("-webkit-appearance", "none")
     .style("position", "absolute")
-    // .style("top", "200px")
+    .style("top", "3px")
     // .style("left", "8%")
+
+  showSliderValue(mySlider.value)
 
   function showSliderValue(value) {
     label.text(`${value}`)
     yearOption = value;
-    console.log(yearOption)
   }
 
   function categoryOptions () {
@@ -690,6 +782,7 @@ function initializeSlider() {
     loadDataMap();
     loadDataPie();
     loadDataLine2();
+    addTitles();
   })
 
 
@@ -773,4 +866,46 @@ function convert() {
     newData.push(elem);
   }
   return newData;
+}
+
+
+function initializeTitles() {
+  d3.select("#mapDiv")
+  .append("div")
+  .attr("class", "mapTextDiv")
+
+  d3.select("#pieDiv")
+  .append("div")
+  .attr("class", "pieTextDiv")
+
+  d3.select("#line1Div")
+  .append("div")
+  .attr("class", "line1TextDiv")
+
+  d3.select("#line2Div")
+  .append("div")
+  .attr("class", "line2TextDiv")
+}
+
+function addTitles() {
+  // d3.select("#mapText").remove()
+  // d3.select("#pieText").remove()
+  // d3.select("#line1Text").remove()
+  // d3.select("#line2Text").remove()
+
+  d3.select(".mapTextDiv")
+  .text(`Map Chart Showing ${categoryOption} per Country in ${yearOption}`).style("vertical-align", "middle").style("text-align", "center")
+  .attr("id", "mapText")
+
+  d3.select(".pieTextDiv")
+  .text(`Pie Chart Showing Different Categories for ${countryOption} in ${yearOption}`).style("vertical-align", "middle").style("text-align", "center")
+  .attr("id", "pieText")
+
+  d3.select(".line1TextDiv")
+  .text(`Line Graph Showing Different Categories for ${countryOption} over Time`).style("vertical-align", "middle").style("text-align", "center")
+  .attr("id", "line1Text")
+
+  d3.select(".line2TextDiv")
+  .text(`Line Graph Showing ${categoryOption} Values for Different Regions over `).style("vertical-align", "middle").style("text-align", "center")
+  .attr("id", "line2Text")
 }
