@@ -38,6 +38,30 @@
   width: 268px;
 }
 
+.col-md-6 {
+  border-right: 10px;
+}
+
+/* #mapDiv {
+  background-color: #DDDDDD;
+  border: 2px solid;
+}
+
+#pieDiv {
+  background-color: #DDDDDD;
+  border: 2px solid;
+}
+
+#line1Div {
+  background-color: #DDDDDD;
+  border: 2px solid;
+}
+
+#line2Div {
+  background-color: #DDDDDD;
+  border: 2px solid;
+} */
+
 /* svg.map g {
   width: 100px;
   height: 100px;
@@ -64,7 +88,8 @@ p {
   font: 15px Arial;
 }
 body {
-  background-color: #DDDDDD;
+  /* background-color: white; */
+  background-color: #f7e7de;
 }
 
 .startpadding {
@@ -105,3 +130,38 @@ body {
   background-size: 100% 100%;
   position: static;
 } */
+
+.toolTip {
+  background: black;
+  color: white;
+  border-radius: 3px;
+  text-align: center;
+  padding: 5px;
+  pointer-events: none !important;
+  /* pointer-events: none !important; */
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 90%;
+  height: 8.4px;
+  cursor: pointer;
+  background: lightblue;
+  border-radius: 1.3px;
+  border: 0.2px solid;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  border: 1.7px solid #000000;
+  height: 20px;
+  width: 7px;
+  border-radius: 3px;
+  background: white;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -6px;
+}

@@ -5,6 +5,7 @@ const data2 = [];
 var categoryOption = "Combustion";
 var yearOption = "2014";
 var countryOption = "DEU";
+var countryName = "Germany"
 
 var svgWidth = document.getElementById("mapDiv").offsetWidth;
 var svgHeight = "350";
@@ -20,6 +21,11 @@ function color2(d) {
   return colorSheme[i]
 }
 
+function colorScale(d, max) {
+  return
+}
+
+
   // Delete duplicate code (initialize -> load) (line 2 en pie)
   // CHECK Clear all previous text etc (debuggen van piechart labels en lines legends) x
   // CHECK fix the worldmap
@@ -30,6 +36,12 @@ function color2(d) {
   // CHECK lines linecharts pretty  x
   // CHECK Click pie slice -> line2 x
   // CHECK Add titles to charts
+  // Geen data --->> andere piechart enzo weergeven
+  // Color naar functie scgrijven met parameters (d en max)
+  // Line-groups opnieuw aanmaken
+
+  // Github scritps ordenen op js, json, python, html etc
+  // De rest van de git ook ordenen
 
   // preprocessing (maybe fix manually) zowel landen als alle categories checken
   // duplicates verwijderen tijdens preprocessing (china honkong etc)
@@ -38,6 +50,10 @@ function color2(d) {
   // header-comments en normale comments in ALLE files
   // Geen uitgecommente code!!! strafpunten!!
   // CHECK Show starting value of slider x
+
+  // math.apply enzo misschien veranderen in d3.max
+
+  // Alleen blauw (ofzo) voor alle kleuren -> bij line moet de hover over de informatie geven
 
 window.onload = function() {
 
@@ -61,10 +77,6 @@ window.onload = function() {
   initializeLine1Container()
   initializeLine2Container()
   initializeSlider()
-
-
-  // makeMapChart()
-
 
 
   }).catch(function(e){
@@ -117,8 +129,10 @@ function initializeMapContainer() {
       .append("path")
       .attr("d", path)
       .attr("class", "hier")
+      .style("stroke", "#DDDDDD")
       .on("click", function(d) {
         countryOption = d.id;
+        countryName = d.properties.name;
         loadDataPie();
         loadDataLine1();
         addTitles();
@@ -145,8 +159,13 @@ function loadDataMap() {
     .attr("class", "toolTip")
     .offset([-10, 0])
     .html(function(d) {
-      return "<span class='toolInfo'>" + d.id + "<br/>" + dataMap[d.id] + "</span>";
+      return "<span class='toolInfo'>" + d.properties.name + "<br/>" + dataMap[d.id] + "</span>";
     })
+
+  // toolTip.append("rect")
+  //     .attr("width", 80)
+  //     .attr("height", 40)
+  //     .attr("fill", "black")
     // .style("left", d3.select(this).attr("cx") + "px")
     // .style("top", d3.select(this).attr("cy") + "px");
   d3.select(".svgMap").call(toolTip)
@@ -154,6 +173,13 @@ function loadDataMap() {
   var colorMap = d3.scaleLinear()
     .domain([0, Math.max.apply(Math, valueArray)])
     .range(["white", "blue"]);
+
+  var blues = colorbrewer.Blues[9]
+
+  var quantize = d3.scaleQuantize()
+      .domain([0, Math.max.apply(Math, valueArray)])
+  		.range(blues);
+
   // var colorMap = d3.scaleQuantize()
   //   .domain([0,600000])
   //   .range(["#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598",
@@ -161,7 +187,7 @@ function loadDataMap() {
 
   d3.selectAll(".hier").style("fill", function(d) {
     if (!isNaN(dataMap[d.id])) {
-      return colorMap(dataMap[d.id])
+      return quantize(dataMap[d.id])
     }
   })
   // TRANSITIONS
@@ -169,9 +195,18 @@ function loadDataMap() {
     toolTip.show(d)
       .style("left", `${d3.event.pageX}px`)
       .style("top", `${d3.event.pageY - 50}px`)
+      // .style("duration")
+      // .transition()
+      //   .duration(200)
+
+    d3.select(this)
+      .style("stroke", "black")
   })
   .on("mouseout", function() {
     toolTip.hide()
+
+    d3.select(this)
+      .style("stroke", "#DDDDDD")
   })
 
 
@@ -189,11 +224,17 @@ function initializePieContainer() {
       radius = Math.min(widthPie, heightPie) / 3;
 
 
-  colorSheme = ["#1f77b4",  "#ff7f0e", "#17becf", "#8c564b", "black", "#7f7f7f", "#d62728"]
-  colorDomain = ["Hydro", "Solar", "Wind", "Combustion", "Nuclear", "Other", "Geothermal"]
-  var color = d3.scaleOrdinal(colorSheme)
-    // .range(["blue", "green", "yellow"])
-    .domain(colorDomain)
+  // colorSheme = ["#1f77b4",  "#ff7f0e", "#17becf", "#8c564b", "black", "#7f7f7f", "#d62728"]
+  // colorDomain = ["Hydro", "Solar", "Wind", "Combustion", "Nuclear", "Other", "Geothermal"]
+  // var color = d3.scaleOrdinal(colorSheme)
+  //   // .range(["blue", "green", "yellow"])
+  //   .domain(colorDomain)
+
+  // var blues = colorbrewer.Blues[9]
+  //
+  // var color = d3.scaleQuantize()
+  //     .domain([0, Math.max.apply(Math, valueArray)])
+  //     .range(blues);
 
   // var color = d3.scaleOrdinal(d3[data[0]])
 
@@ -284,11 +325,30 @@ function loadDataPie() {
       radius = Math.min(widthPie, heightPie) / 3;
 
 
-  colorSheme = ["#1f77b4",  "#ff7f0e", "#17becf", "#8c564b", "black", "#7f7f7f", "#d62728"]
-  colorDomain = ["Hydro", "Solar", "Wind", "Combustion", "Nuclear", "Other", "Geothermal"]
-  var color = d3.scaleOrdinal(colorSheme)
-    // .range(["blue", "green", "yellow"])
-    .domain(colorDomain)
+  // colorSheme = ["#1f77b4",  "#ff7f0e", "#17becf", "#8c564b", "black", "#7f7f7f", "#d62728"]
+  // colorDomain = ["Hydro", "Solar", "Wind", "Combustion", "Nuclear", "Other", "Geothermal"]
+  // var color = d3.scaleOrdinal(colorSheme)
+  //   // .range(["blue", "green", "yellow"])
+  //   .domain(colorDomain)
+
+  var valueArray = [];
+  for (value of Object.values(filterData("pie"))) {
+    valueArray.push(value.Quantity)
+  }
+
+  var blues = colorbrewer.Blues[9]
+
+  var color = d3.scaleQuantize()
+      .domain([0, Math.max.apply(Math, valueArray)])
+      .range(blues);
+
+  var toolTip = d3.tip()
+    .attr("class", "toolTip")
+    .offset([-10, 0])
+    .html(function(d) {
+      return "<span class='toolInfo'>" + d.data.categoryTag + "<br/>" + d.data.Quantity + "</span>";
+    })
+
 
   var arc = d3.arc()
     .outerRadius(radius - 10)
@@ -311,7 +371,7 @@ function loadDataPie() {
   // TOOLTIP SHIZZLE MAAR EERST MAP MOOIMAKEN ZODAT JE STYLE KAN KOPIEREN
   // d3.selectAll(".piePath").on("mouseover", function(d) {
   // })
-
+  d3.selectAll('.svgPie').call(toolTip)
   d3.selectAll(".arc").remove()
 
   var g = d3.select(".svgPie").selectAll(".arc")
@@ -326,11 +386,32 @@ function loadDataPie() {
     .attr("class", "piePath")
      .attr("d", arc)
      .style("fill", function(d) {
-       return color(d.data.categoryTag); })
+       return color(d.data.Quantity); })
+       .style("stroke-width", ".5px")
+       .style("stroke", "black")
      .on("click", function(d) {
        categoryOption = d.data.categoryTag;
        loadDataLine2();
        addTitles();
+     })
+     .on("mouseover", function(d) {
+       toolTip.show(d)
+         .style("left", `${d3.event.pageX}px`)
+         .style("top", `${d3.event.pageY - 50}px`)
+         // .style("duration")
+         // .transition()
+         //   .duration(200)
+
+       d3.select(this)
+         .style("stroke", "black")
+         .style("stroke-width", "2px")
+     })
+     .on("mouseout", function() {
+       toolTip.hide()
+
+       d3.select(this)
+         .style("stroke", "black")
+         .style("stroke-width", ".5px")
      })
 
 
@@ -477,7 +558,7 @@ function initializeLine1Container() {
 
 
 function loadDataLine1() {
-  d3.select(".line-group").remove()
+  d3.select(".line-group1").remove()
 
   var dataLine1 = filterData("line1")
 
@@ -500,66 +581,175 @@ function loadDataLine1() {
   var line = d3.line()
   .x(d => xScale(d.Year))
   .y(d => yScale(d.Quantity));
+
+
   //
   // d3.selectAll(".line-group").data(dataLine1).enter().
   var lines = d3.select(".lines")
-  lines.selectAll(".line-group")
+  lines.selectAll(".line-group1")
     .data(dataLine1).enter()
     .append('g')
-      .attr('class', 'line-group')
+      .attr('class', 'line-group1')
 
     .append('path')
     .attr('class', 'lineLine1')
 
+  var toolTip = d3.tip()
+    .attr("class", "toolTip")
+    .offset([-10, 0])
+    .html(function(d) {
+      return "<span class='toolInfo'>" + d.categoryTag + "<br/>" + d.Year + ": " + d.Quantity + "</span>";
+    })
+
+  var toolTipLine = d3.tip()
+    .attr("class", "toolTip")
+    .offset([-10, 0])
+    .html(function(d) {
+      return "<span class='toolInfo'>" + d + "</span>";
+    })
+
+    d3.select(".line1").call(toolTip)
+    d3.select(".line1").call(toolTipLine)
+
+ function mand(data) {
+   bigValuesList = []
+   for (cat of data) {
+     smallValuesList = [];
+     for (value of cat.values) {
+       smallValuesList.push(value.Quantity)
+     }
+     bigValuesList.push(d3.mean(smallValuesList))
+   }
+   return Math.max.apply(Math, bigValuesList)
+ }
+
+ function mand2(values) {
+   smallValuesList = [];
+   for (value of values) {
+     smallValuesList.push(value.Quantity)
+   }
+   return d3.mean(smallValuesList)
+ }
+
+ var blues = colorbrewer.Blues[9]
+
+ var color3 = d3.scaleQuantize()
+     .domain([0, mand(dataLine1)])
+     .range(blues);
 
 
   d3.selectAll(".lineLine1").data(dataLine1)
     .attr('d', d => line(d.values))
     // .style('stroke', (d, i) => color(i))
     .style('stroke', function(d) {
-      return color2(d.cat)
+      return color3(mand2(d.values))
     })
     .style("stroke-width", "3px")
     .style("fill", "transparent")
+    .on("mouseover", function(d){
+      toolTipLine.show(d.cat)
+        .style("left", `${d3.event.pageX}px`)
+        .style("top", `${d3.event.pageY - 50}px`)
+      d3.select(this)
+        .style("stroke", "#74ffb0")
+        .style("stroke-width", "4px")
+    })
+    .on("mouseout", function() {
+      toolTipLine.hide()
+      d3.select(this)
+        .style("stroke", function(d) {
+          return color3(mand2(d.values))
+        })
+        .style("stroke-width", "4px")
+    })
+
+  // d3.selectAll(".lineLine1").attr("d", function(d) {console.log(d)})
+  d3.selectAll(".circle").remove()
+
+  var parentColor = null;
+  d3.selectAll(".line-group1").selectAll(".circle")
+    .data(function(d) { return d.values })
+    .enter()
+    .append("circle")
+      .attr("class", "circle")
+      .attr("r",3)
+      .attr("cx", function(d) {
+        return xScale(d.Year) })
+      .attr("cy", function(d) {
+        return yScale(d.Quantity) })
+      // .attr("fill", function(d) { return color3(d.Quantity) })
+      .attr("fill", function(d) {
+        return d3.select(this.parentNode).select(".lineLine1").style("stroke")
+      })
+      .on("mouseover", function(d) {
+        toolTip.show(d)
+        .style("left", `${d3.event.pageX}px`)
+        .style("top", `${d3.event.pageY - 50}px`)
+        parentColor = d3.select(this.parentNode).select(".lineLine1").style("stroke")
+
+        d3.select(this.parentNode).select(".lineLine1").style("stroke", "#74ffb0")
+
+      })
+      .on("mouseout", function(d) {
+        toolTip.hide()
+        d3.select(this.parentNode).select(".lineLine1").style("stroke", parentColor)
+      })
+
+  // function getHighest(values) {
+  //   return Object.keys(values).reduce(function(a, b) { return values[a].Year > values[b].Year ? a : b})
+  // }
+  //
+  // d3.selectAll(".line-group1").append("text")
+  //   .attr("class", "label")
+  //   .datum(function(d) {
+  //     return {
+  //       name: d.cat,
+  //       value: Object.values(d.values)[getHighest(d.values)].Quantity
+  //     }
+  //   })
+  //   .attr("x", 3)
+  //   .attr("dy", ".35em")
+  //   .attr("transform", function(d) {
+  //     console.log(d)
+  //     return `translate(${svgWidth - 150} ${yScale(d.value)})`})
+  //   .text(function(d) { return d.name })
 
   var yAxis = d3.axisLeft(yScale).ticks(5);
 
   d3.select(".yAxis1").call(yAxis)
 
-  d3.selectAll(".colorRect").remove()
-  d3.selectAll(".legend1").remove()
+  // d3.selectAll(".colorRect").remove()
+  // d3.selectAll(".legend1").remove()
 
-  var legend = d3.select(".line1").selectAll(".legend1")
-    .data(dataLine1)
-    .enter()
-    .append("text")
-    .attr("class", "legend1")
-   .text(function(d) { return d.cat})
-    .attr("x", 100)
-    .attr("y", 9)
-    .attr("dy", ".40em")
-    .style("text-anchor", "start")
-    .attr("transform", function(d, i) {
-      return "translate(" + svgWidth * 0.73 + " " + i * 20 + ")";
-    });
-
-  var legendRects = d3.select(".line1").selectAll(".legend-rect")
-    .append("rect")
-    .attr("class", "legend-rect")
-    .data(dataLine1)
-    .enter()
-    .append("rect")
-      .attr("class", "colorRect")
-      .attr("x", 20)
-      .attr("width", 20)
-      .attr("height", 20)
-      .style("fill", function(d) {
-        console.log(d)
-        console.log(color2(d.cat));
-        return color2(d.cat) })
-      .attr("transform", function(d, i) {
-        return "translate(" + svgWidth * 0.80 + " " + i * 20 + ")";
-      });
+  // var legend = d3.select(".line1").selectAll(".legend1")
+  //   .data(dataLine1)
+  //   .enter()
+  //   .append("text")
+  //   .attr("class", "legend1")
+  //  .text(function(d) { return d.cat})
+  //   .attr("x", 100)
+  //   .attr("y", 9)
+  //   .attr("dy", ".40em")
+  //   .style("text-anchor", "start")
+  //   .attr("transform", function(d, i) {
+  //     return "translate(" + svgWidth * 0.73 + " " + i * 20 + ")";
+  //   });
+  //
+  // var legendRects = d3.select(".line1").selectAll(".legend-rect")
+  //   .append("rect")
+  //   .attr("class", "legend-rect")
+  //   .data(dataLine1)
+  //   .enter()
+  //   .append("rect")
+  //     .attr("class", "colorRect")
+  //     .attr("x", 20)
+  //     .attr("width", 20)
+  //     .attr("height", 20)
+  //     .style("fill", function(d) {
+  //       return color2(d.cat) })
+  //     .attr("transform", function(d, i) {
+  //       return "translate(" + svgWidth * 0.80 + " " + i * 20 + ")";
+  //     });
   }
 
 
@@ -601,10 +791,10 @@ function initializeLine2Container() {
 
 
     var lines = svgLine2.append("g").attr("class", "lines")
-    lines.selectAll(".line-group")
+    lines.selectAll(".line-group2")
       .data(dataLine2).enter()
       .append('g')
-        .attr('class', 'line-group')
+        .attr('class', 'line-group2')
         // .attr("transform", `translate(0 100)`)
 
       .append('path')
@@ -638,7 +828,6 @@ function initializeLine2Container() {
       loadDataLine2();
 }
 
-
 function loadDataLine2() {
   var margin = {top: 50, right: 50, left: 50, bottom: 50},
     widthLine2 = svgWidth - margin.left - margin.right,
@@ -663,46 +852,136 @@ function loadDataLine2() {
 
   var yAxis = d3.axisLeft(yScale).ticks(5);
 
-  regionColors = ["#283747", "#F1C40F", "#2471A3", "#229954", "#BA4A00"]
 
+
+   function mand(data) {
+     bigValuesList = []
+     for (cat of data) {
+       smallValuesList = [];
+       for (value of cat.values) {
+         smallValuesList.push(value.Quantity)
+       }
+       bigValuesList.push(d3.mean(smallValuesList))
+     }
+     return Math.max.apply(Math, bigValuesList)
+   }
+
+   function mand2(values) {
+     smallValuesList = [];
+     for (value of Object.values(values.values)) {
+       smallValuesList.push(value.Quantity)
+     }
+     return d3.mean(smallValuesList)
+   }
+
+  var blues = colorbrewer.Blues[9]
+
+  var color = d3.scaleQuantize()
+      .domain([0, mand(dataLine2)])
+      .range(blues);
+
+  var toolTipDot = d3.tip()
+    .attr("class", "toolTip")
+    .offset([-10, 0])
+    .html(function(d) {
+      return "<span class='toolInfo'>" + d.categoryTag + "<br/>" + d.Year + ": " + d.Quantity + "</span>";
+    })
+
+  var toolTipLine = d3.tip()
+    .attr("class", "toolTip")
+    .offset([-10, 0])
+    .html(function(d) {
+      return "<span class='toolInfo'>" + d + "</span>";
+    })
+
+    d3.select(".line2").call(toolTipDot)
+    d3.select(".line2").call(toolTipLine)
 
   d3.selectAll(".PathLine2").data(dataLine2).attr('d', d => line2(d.values))
-    .style("stroke", function (d, i) { return regionColors[i] } )
+    .style("stroke", function (d, i) { return color(mand2(d)) } )
 
   d3.select(".yAxis2").call(yAxis)
 
-  var legend = d3.select(".line2").selectAll(".legend2")
-    .data(dataLine2)
+  d3.selectAll(".PathLine2")
+    .on("mouseover", function(d){
+      toolTipLine.show(d.values)
+      d3.select(this)
+        .style("stroke", "#74ffb0")
+        .style("stroke-width", "4px")
+    })
+    .on("mouseout", function() {
+      toolTipLine.hide()
+      d3.select(this)
+        .style("stroke", function(d) {
+          return color(mand2(d))
+        })
+        .style("stroke-width", "4px")
+    })
+
+
+    d3.selectAll(".circle2").remove()
+
+  var parentColor = null;
+  d3.selectAll(".line-group2").selectAll(".circle2")
+    .data(function(d) { return d.values })
     .enter()
-    .append("text")
-    .attr("class", "legend2")
-   .text(function(d) {
-      return d.region})
-    .attr("x", 100)
-    .attr("y", 9)
-    .attr("dy", ".40em")
-    .style("text-anchor", "start")
-    .attr("transform", function(d, i) {
-      return "translate(" + svgWidth * 0.73 + " " + i * 20 + ")";
-    });
-
-
-
-  var legendRects = d3.select(".line2").selectAll(".legend-rect")
-    .append("rect")
-    .attr("class", "legend-rect")
-    .data(dataLine2)
-    .enter()
-    .append("rect")
-      .attr("x", 20)
-      .attr("width", 20)
-      .attr("height", 20)
-      .style("fill", function(d, i) {
-        return regionColors[i]
+    .append("circle")
+      .attr("class", "circle2")
+      .attr("r",3)
+      .attr("cx", function(d) {
+        return xScale(d.Year) })
+      .attr("cy", function(d) {
+        return yScale(d.Quantity) })
+      // .attr("fill", function(d) { return color3(d.Quantity) })
+      .attr("fill", function(d) {
+        return d3.select(this.parentNode).select(".PathLine2").style("stroke")
       })
-      .attr("transform", function(d, i) {
-        return "translate(" + svgWidth * 0.80 + " " + i * 20 + ")";
-      });
+      .on("mouseover", function(d) {
+        toolTipDot.show(d)
+        .style("left", `${d3.event.pageX}px`)
+        .style("top", `${d3.event.pageY - 50}px`)
+        parentColor = d3.select(this.parentNode).select(".PathLine2").style("stroke")
+
+        d3.select(this.parentNode).select(".PathLine2").style("stroke", "#74ffb0")
+
+      })
+      .on("mouseout", function(d) {
+        toolTipDot.hide()
+        d3.select(this.parentNode).select(".PathLine2").style("stroke", parentColor)
+      })
+
+  // var legend = d3.select(".line2").selectAll(".legend2")
+  //   .data(dataLine2)
+  //   .enter()
+  //   .append("text")
+  //   .attr("class", "legend2")
+  //  .text(function(d) {
+  //     return d.region})
+  //   .attr("x", 100)
+  //   .attr("y", 9)
+  //   .attr("dy", ".40em")
+  //   .style("text-anchor", "start")
+  //   .attr("transform", function(d, i) {
+  //     return "translate(" + svgWidth * 0.73 + " " + i * 20 + ")";
+  //   });
+  //
+  //
+  //
+  // var legendRects = d3.select(".line2").selectAll(".legend-rect")
+  //   .append("rect")
+  //   .attr("class", "legend-rect")
+  //   .data(dataLine2)
+  //   .enter()
+  //   .append("rect")
+  //     .attr("x", 20)
+  //     .attr("width", 20)
+  //     .attr("height", 20)
+  //     .style("fill", function(d, i) {
+  //       return regionColors[i]
+  //     })
+  //     .attr("transform", function(d, i) {
+  //       return "translate(" + svgWidth * 0.80 + " " + i * 20 + ")";
+  //     });
 
   // d3.select("#line2Div").append("text")
   //     .attr("text-anchor", "middle")
@@ -731,6 +1010,11 @@ function initializeSlider() {
     .attr("id", "mySlider")
     .attr("min", "1995")
     .attr("max", "2014")
+    // .style("-webkit-appearance", "none")
+    // .style("background", "transparent")
+    // .style("track")
+    // .style("border", function() {
+    // })
     // .style("top", "20px")
     document.getElementById("mySlider").defaultValue = 2000;
 
@@ -746,7 +1030,6 @@ function initializeSlider() {
   var label = d3.select(".mand").append("label").style("position", "absolute").style("top", "3px")
 
     // .attr("transform", `translate(${window.innerWidth * 0.05} ${window.innerHeight * 0.05})`)
-    // .style("-webkit-appearance", "none")
     .style("position", "absolute")
     .style("top", "3px")
     // .style("left", "8%")
@@ -898,14 +1181,14 @@ function addTitles() {
   .attr("id", "mapText")
 
   d3.select(".pieTextDiv")
-  .text(`Pie Chart Showing Different Categories for ${countryOption} in ${yearOption}`).style("vertical-align", "middle").style("text-align", "center")
+  .text(`Pie Chart Showing Different Categories for ${countryName} in ${yearOption}`).style("vertical-align", "middle").style("text-align", "center")
   .attr("id", "pieText")
 
   d3.select(".line1TextDiv")
-  .text(`Line Graph Showing Different Categories for ${countryOption} over Time`).style("vertical-align", "middle").style("text-align", "center")
+  .text(`Line Graph Showing Different Categories for ${countryName} over Time`).style("vertical-align", "middle").style("text-align", "center")
   .attr("id", "line1Text")
 
   d3.select(".line2TextDiv")
-  .text(`Line Graph Showing ${categoryOption} Values for Different Regions over `).style("vertical-align", "middle").style("text-align", "center")
+  .text(`Line Graph Showing ${categoryOption} Values for Different Regions over Time`).style("vertical-align", "middle").style("text-align", "center")
   .attr("id", "line2Text")
 }
