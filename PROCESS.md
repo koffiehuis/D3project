@@ -34,3 +34,15 @@ Alpha version: Linking all charts to the select tag and to the year-slider. Havi
 
 # Day 10
 Alpha version: Fixed worldmap, added legends (buggy), linked piechart to figure4, implemented bootstrap for resizing page and content
+
+# Day 11
+Beta version: Fixed legends for line charts, added titles to the charts
+
+# Day 12
+Beta version: New color scheme for worldmap, made slider pretty, debugged piechart-texts
+
+# Day 13
+Beta version: Added tooltips, implemented new colors on every chart (blue only), removed legends :(
+
+# Day 14
+Beta version: Added dots to line charts
