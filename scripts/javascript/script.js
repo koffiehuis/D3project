@@ -136,32 +136,31 @@ function loadDataMap() {
 
   // Get all relevant values for each country
   var dataMap = filterData("worldmap")
-
-  valueArray = [];
+  var valueArray = [];
   for (var elem of Object.values(dataMap)) {
     valueArray.push(elem)
   }
 
-
-
+  // Makes worldmap tooltip
   var toolTip = d3.tip()
     .attr("class", "toolTip")
     .offset([-10, 0])
     .html(function(d) {
-      return "<span class='toolInfo'>" + d.properties.name + "<br/>" + dataMap[d.id]  + " GWh " + "</span>";
+      return ("<span class='toolInfo'>" + d.properties.name + "<br/>"
+              + dataMap[d.id]  + " GWh " + "</span>");
     })
-
 
   d3.select(".svgMap").call(toolTip)
 
-
-
+  // Add colors to worldmap
   var quantize = d3.scaleQuantize()
       .domain([0, Math.max.apply(Math, valueArray)])
   		.range(blues);
 
   d3.selectAll(".countryPath")
   .style("fill", function(d) {
+
+    // If there is data, set color for country
     if (!isNaN(dataMap[d.id])) {
       return quantize(dataMap[d.id])
     }
