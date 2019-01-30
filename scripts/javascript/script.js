@@ -49,6 +49,10 @@ window.onload = function() {
   // Initialize year-slider
   initializeSlider()
 
+  // Gives select-tag options
+  categoryOptions()
+
+
   // Deal with errors
   }).catch(function(e){
       throw(e);
@@ -857,16 +861,6 @@ function initializeSlider() {
     .style("background", "white")
     .attr("rx", 10)
     .text(`${mySlider.value}`)
-
-
-  // showSliderValue(mySlider.value)
-  //
-  // function showSliderValue(value) {
-  //   label.text(`${value}`)
-  //
-  //   yearOption = value;
-  // }
-  categoryOptions()
 };
 
 function categoryOptions () {
