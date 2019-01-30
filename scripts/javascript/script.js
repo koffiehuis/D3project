@@ -580,8 +580,7 @@ function loadDataLine1() {
         parentColor = d3.select(this.parentNode).select(".lineLine1")
           .style("stroke");
         d3.select(this.parentNode).select(".lineLine1")
-          .style("stroke", "#74ffb0")l
-
+          .style("stroke", "#74ffb0");
       })
 
       // Hides tooltip and accentuation
@@ -911,8 +910,8 @@ function filterData(spec) {
   // Selects data for worldmap
   if (spec == "worldmap") {
     regionDict = {};
-    var groupCategory = _.groupBy(allData, obj => obj.categoryTag);
-    groupYear = _.groupBy(groupCategory[categoryOption], obj => obj.Year);
+    var groupCat = _.groupBy(allData, obj => obj.categoryTag);
+    groupYear = _.groupBy(groupCat[categoryOption], obj => obj.Year);
     groupRegion = _.groupBy(groupYear[yearOption], obj => obj.ISO);
     for (var region of Object.values(groupRegion)) {
       regionDict[region[0].ISO] =  region[0].Quantity;
@@ -930,20 +929,20 @@ function filterData(spec) {
   // Selects data for linechart 1
   else if  (spec == "line1") {
     var groupCountry = _.groupBy(allData, obj => obj.ISO)[countryOption];
-    var groupCategory = _.groupBy(groupCountry, obj => obj.categoryTag);
+    var groupCat = _.groupBy(groupCountry, obj => obj.categoryTag);
     array = [];
-    for (var index in Object.values(groupCategory)) {
-      sorted = Object.values(groupCategory)[index].sort((a, b) => (a.Year > b.Year) ? 1 : -1)
-      array.push({"categoryTag": Object.keys(groupCategory)[index], "values": sorted})
+    for (var i in Object.values(groupCat)) {
+      sorted = Object.values(groupCat)[i].sort((a, b) => (a.Year > b.Year) ? 1 : -1)
+      array.push({"categoryTag": Object.keys(groupCat)[i], "values": sorted})
     }
     return array;
   }
 
   // Selects data for linechart2
   else if (spec == "line2") {
-    var groupCategory = _.groupBy(allData, obj => obj.categoryTag);
+    var groupCat = _.groupBy(allData, obj => obj.categoryTag);
     totalArray = [];
-    var groupRegion =  _.groupBy(groupCategory[categoryOption], obj => obj.Region);
+    var groupRegion =  _.groupBy(groupCat[categoryOption], obj => obj.Region);
     for (var index in Object.values(groupRegion)) {
       regionArray = [];
       key = Object.keys(groupRegion)[index]
