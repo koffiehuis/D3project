@@ -110,7 +110,8 @@ function initializeMapContainer() {
 
         // Give user alers if country with no data is selected
         if (d3.select(this).style("fill") == "rgb(0, 0, 0)") {
-          alert(`No data for ${categoryOption} as a source for energy in ${d.properties.name}`)
+          alert(`No data for ${categoryOption} as a source for energy in`
+                + `${d.properties.name}`)
         }
 
         // Change global settings
