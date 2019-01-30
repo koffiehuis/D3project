@@ -1,17 +1,28 @@
+# Mark van Malestein
+# D3-project
+# 10807640
+# group K
+
+# Preprocessing file converts csv to usable JSON
+
+
 import pandas as pd
 import json
 import csv
 
 
 def load_csv():
+    """Loads csv"""
     with open("all_energy_statistics.csv", "r", newline="") as csvfile:
         data = []
         for row in csv.reader(csvfile, delimiter=","):
+            # Make sure only data rows are used
             if len(row) >= 4:
+
+                # Select correct information
                 if ("Total Electricity" and "Main activity" in row[1]
                     and row[6] == "total_electricity"):
                     row = row[:-1]
-                    # row[0] = row[0][0:5]
                     data.append(row)
 
         headers = ['Country or Area', 'Commodity - Transaction', 'Year', 'Unit',
@@ -19,12 +30,14 @@ def load_csv():
 
         df = pd.DataFrame.from_records(data, columns=headers)
 
+        # Delete unusefull rows
         del df["Unit"]
         del df["Quantity Footnotes"]
 
     return df
 
 def create_categories(df):
+    """Adds categories"""
     cat_dict = {"Combustion": "From combustible fuels â€“ Main activity",
                         "Geothermal": "Geothermal â€“ Main activity",
                         "Hydro": "Hydro â€“ Main activity",
@@ -33,6 +46,7 @@ def create_categories(df):
                         "Solar": "Solar â€“ Main activity",
                         "Wind": "Wind â€“ Main activity"}
 
+    # Change original categories to smaller categories
     df = df.loc[df["Commodity - Transaction"].isin(list(cat_dict.values()))]
     cat_tags = []
     for i in df["Commodity - Transaction"].tolist():
@@ -40,16 +54,12 @@ def create_categories(df):
 
     df["categoryTag"] = cat_tags
 
-    # deu = df.loc[df['Country or Area'] == "Germa"]
-    # print(deu)
-
-    # print(df.loc[df['ISO'] == "DEU"])
-
     del df["Commodity - Transaction"]
 
     return df
 
 def add_id(df):
+    """Adds iso id"""
     with open("country_region.csv", "r", newline="") as csvfile:
         country_dict = {}
         for row in  csv.reader(csvfile, delimiter=","):
@@ -64,6 +74,8 @@ def add_id(df):
     region_list = []
     iso_list = []
 
+    # Needed to hardcode some countries due to indiscrepancies between ISO file
+    # and data file
     hardcode = {"Korea, Dem.Ppl's.Rep.":  "Democratic People's Republic of Korea",
                 'T.F.Yug.Rep. Macedonia': "The former Yugoslav Republic of Macedonia",
                 "CÃ´te d'Ivoire": "Côte d’Ivoire",
@@ -90,43 +102,38 @@ def add_id(df):
                 'St. Kitts-Nevis': "Saint Kitts and Nevis"}
 
     for name in df["Country or Area"].tolist():
+        # If country is in hardcode dict use hardcoded description
         if name in hardcode:
             name = hardcode[name]
-            print(name)
+
+        # Else try to find country in iso List
         try:
             region_list.append(country_dict[name][0])
             iso_list.append(country_dict[name][1])
+
+        # Nothing found, make iso and region None
         except:
             region_list.append(None)
             iso_list.append(None)
     df["Region"] = region_list
     df["ISO"] = iso_list
 
-    # print(df.loc[df['ISO'] == "DEU"])
     energy_file = set()
     country_file = set()
     iso_file = set()
     fout_file = set()
     for index, row in df.iterrows():
-        # mand.update(i)
         energy_file.add(row["Country or Area"],)
         iso_file.add(row["ISO"],)
         if not row["ISO"]:
             fout_file.add(row["Country or Area"],)
 
-    print(fout_file)
-    print(len(fout_file))
-
-    print(f"energy: {len(energy_file)}")
-    print(f"country: {len(country_dict)}")
-    print(f"iso: {len(iso_file)}")
-
-    print(country_dict)
 
     del df["Country or Area"]
     return df
 
 def write_json(df):
+    """Write as Json file"""
     json = df.to_json(orient = "records")
     with open("json.json", "w") as file:
         file.write(json)

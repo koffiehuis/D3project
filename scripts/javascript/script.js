@@ -1,3 +1,10 @@
+// Mark van Malestein
+// D3-project
+// 10807640
+// group K
+
+// Main script
+
 const fileName = "data/json.json"
 const data = [];
 
@@ -11,19 +18,6 @@ const svgHeight = "350";
 
 const blues = colorbrewer.Blues[9]
 
-
-//https://blockbuilder.org/SpaceActuary/69e7f74035787955bcf9
-
-  // legenda worldmap
-  // titles mooimaken / verplaatsen
-  // Delete duplicate code (initialize -> load) (line 2 en pie)
-  // Color naar functie scgrijven met parameters (d en max)
-
-  // Github scritps ordenen op js, json, python, html etc
-  // De rest van de git ook ordenen
-
-  // header-comments en normale comments in ALLE files
-  // Geen uitgecommente code!!! strafpunten!!
 window.onload = function() {
 
 
