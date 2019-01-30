@@ -713,6 +713,7 @@ function loadDataLine2() {
 
   var maxValue = getHighestValue(dataLine2)
 
+  // Get Mean and max (different from functions used by line1)
   function getHighestValue(data) {
     bigValuesList = []
     for (cat of data) {
@@ -820,12 +821,15 @@ function loadDataLine2() {
       });
 }
 
-
+// This function makes the year-slider, bound to the worldmap
 function initializeSlider() {
+
+  // Add p element for slider
   var sliderP = d3.select("#mapDiv").append("p").attr("class", "sliderP")
   .style("position", "absolute")
   .style("top", "25px")
 
+  // Add range-input tag (slider)
   var slider = sliderP.append("input")
     .attr("class", "slider")
     .attr("type", "range")
@@ -833,16 +837,17 @@ function initializeSlider() {
     .attr("min", "1995")
     .attr("max", "2014")
 
-    document.getElementById("mySlider").defaultValue = 2000;
+  // Set defaultValue to 2000
+  document.getElementById("mySlider").defaultValue = 2000;
 
-    slider.on("change", function(d) {
-      showSliderValue(mySlider.value)
-      yearOption = mySlider.value;
-      loadDataMap()
-      loadDataPie();
-      addTitles();
-      return mySlider.value
-    })
+  // When slider-value is changed, reload map, piechart and titles
+  slider.on("change", function(d) {
+    showSliderValue(mySlider.value)
+    yearOption = mySlider.value;
+    loadDataMap()
+    loadDataPie();
+    addTitles();
+  })
 
   var label = d3.select(".sliderP").append("label")
     .style("position", "absolute")
