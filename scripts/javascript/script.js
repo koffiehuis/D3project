@@ -7,7 +7,7 @@
 
 
 // Initialize global variables
-const fileName = "data/json.json"
+const fileName = "data/json.json";
 const data = [];
 
 var categoryOption = "Combustion";
@@ -18,7 +18,7 @@ var countryName = "Germany";
 var svgWidth = document.getElementById("mapDiv").offsetWidth;
 const svgHeight = "350";
 
-const blues = colorbrewer.Blues[9]
+const blues = colorbrewer.Blues[9];
 
 // Load JSON with preprocessed data and initialize all elements
 window.onload = function() {
@@ -29,7 +29,7 @@ window.onload = function() {
     .then((response) => response.json())
     .then((rawData) => {
       for (index in rawData) {
-        dataArray[index] = rawData[index]
+        dataArray[index] = rawData[index];
       }
       data.push(dataArray);
 
@@ -37,41 +37,41 @@ window.onload = function() {
   convert();
 
   // Add titles
-  initializeTitles()
-  addTitles()
+  initializeTitles();
+  addTitles();
 
   // Initialize chart containers
-  initializeMapContainer()
-  initializePieContainer()
-  initializeLine1Container()
-  initializeLine2Container()
+  initializeMapContainer();
+  initializePieContainer();
+  initializeLine1Container();
+  initializeLine2Container();
 
   // Initialize year-slider
-  initializeSlider()
+  initializeSlider();
 
   // Gives select-tag options
-  categoryOptions()
+  categoryOptions();
 
 
   // Deal with errors
   }).catch(function(e){
       throw(e);
   });
-};
+}
 
 // Make chart size dependable on window size
 window.onresize = function() {
   svgWidth = document.getElementById("mapDiv").offsetWidth;
-  initializeMapContainer()
-  initializePieContainer()
-  initializeLine1Container()
-  initializeLine2Container()
+  initializeMapContainer();
+  initializePieContainer();
+  initializeLine1Container();
+  initializeLine2Container();
 }
 
 // If new category value is selected, reload relevant charts and titles
 d3.selectAll("select").on("change", function() {
-  var selected = document.getElementById("mySelect")
-  categoryOption = selected.options[selected.selectedIndex].value
+  var selected = document.getElementById("mySelect");
+  categoryOption = selected.options[selected.selectedIndex].value;
   loadDataMap();
   loadDataPie();
   loadDataLine2();
@@ -85,7 +85,7 @@ function initializeMapContainer() {
   d3.select(".svgMap").remove();
 
   var width = svgWidth,
-  height = "350";
+    height = "350";
 
   // Path for countries on worldmap
   var path = d3.geoPath();
@@ -97,12 +97,13 @@ function initializeMapContainer() {
       .attr("class", "svgMap")
       .attr("id", "svgMap")
       .append("g")
-      .attr("class", "gMap")
+      .attr("class", "gMap");
 
   // Load worldmap data, then make worlddmap
   var topojson = Promise.resolve(d3.json("data/world_countries.json"));
   topojson.then(function(value) {
 
+    // Give projection and path for worldmap
     var projection = d3.geoMercator()
                        .scale(100)
                        .translate( [width / 2.2, height / 1.5]);
@@ -125,7 +126,7 @@ function initializeMapContainer() {
         // Give user alers if country with no data is selected
         if (d3.select(this).style("fill") == "rgb(0, 0, 0)") {
           alert(`No data for ${categoryOption} as a source for energy in`
-                + ` ${d.properties.name}`)
+                + ` ${d.properties.name}`);
         }
 
         // Change global settings
@@ -136,11 +137,11 @@ function initializeMapContainer() {
         loadDataPie();
         loadDataLine1();
         addTitles();
-      })
+      });
 
     // Load first data shown when loading page
     loadDataMap();
-})
+  });
 }
 
 // Loads data to worldmap
@@ -150,10 +151,10 @@ function loadDataMap() {
   d3.select(".mapLegend").remove();
 
   // Get all relevant values for each country
-  var dataMap = filterData("worldmap")
+  var dataMap = filterData("worldmap");
   var valueArray = [];
   for (var elem of Object.values(dataMap)) {
-    valueArray.push(elem)
+    valueArray.push(elem);
   }
 
   // Makes worldmap tooltip
@@ -163,40 +164,40 @@ function loadDataMap() {
     .html(function(d) {
       return ("<span class='toolInfo'>" + d.properties.name + "<br/>"
               + dataMap[d.id]  + " GWh " + "</span>");
-    })
+    });
 
-  d3.select(".svgMap").call(toolTip)
+  d3.select(".svgMap").call(toolTip);
 
   // Add colors to worldmap
   var quantize = d3.scaleQuantize()
-      .domain([0, Math.max.apply(Math, valueArray)])
-  		.range(blues);
+    .domain([0, Math.max.apply(Math, valueArray)])
+		.range(blues);
 
   d3.selectAll(".countryPath")
-  .style("fill", function(d) {
+    .style("fill", function(d) {
 
     // If there is data, set color for country
     if (!isNaN(dataMap[d.id])) {
-      return quantize(dataMap[d.id])
+      return quantize(dataMap[d.id]);
     }
-  })
+  });
 
 
   // Add mouseover events, tooltip and border color
   d3.selectAll(".countryPath").on("mouseover", function(d) {
     toolTip.show(d)
       .style("left", `${d3.event.pageX}px`)
-      .style("top", `${d3.event.pageY - 50}px`)
+      .style("top", `${d3.event.pageY - 50}px`);
 
     d3.select(this)
-      .style("stroke", "black")
+      .style("stroke", "black");
   })
   .on("mouseout", function() {
-    toolTip.hide()
+    toolTip.hide();
 
     d3.select(this)
-      .style("stroke", "#7F7F7F")
-  })
+      .style("stroke", "#7F7F7F");
+  });
 
   // Make legend for worldmap
   var legendQuantize = d3.legendColor()
@@ -206,7 +207,7 @@ function loadDataMap() {
     .scale(quantize);
 
   d3.select(".gMap").append("g").attr("class", "mapLegend").call(legendQuantize)
-    .attr("transform", `translate(${svgWidth - 75} 190)`)
+    .attr("transform", `translate(${svgWidth - 75} 190)`);
 }
 
 // Initializes the piechart container
@@ -228,10 +229,10 @@ function initializePieContainer() {
     .append("svg")
     .attr("class", "svgPie")
     .attr("width", `${svgWidth}`)
-    .attr("height", `${svgHeight}`)
+    .attr("height", `${svgHeight}`);
 
   // Load first data shown when loading page
-  loadDataPie()
+  loadDataPie();
 }
 
 // Loads data for pie-chart
@@ -246,12 +247,12 @@ function loadDataPie() {
   var valueArray = [];
   var valueSum = 0;
   for (value of Object.values(filterData("pie"))) {
-    valueArray.push(value.Quantity)
-    valueSum += value.Quantity
-  }
+    valueArray.push(value.Quantity);
+    valueSum += value.Quantity;
+  };
 
 
-  var maxValue = Math.max.apply(Math, valueArray)
+  var maxValue = Math.max.apply(Math, valueArray);
 
   // Makes tooltip
   var toolTip = d3.tip()
@@ -260,7 +261,7 @@ function loadDataPie() {
     .html(function(d) {
       return ("<span class='toolInfo'>" + d.data.categoryTag + "<br/>"
               + d.data.Quantity  + " GWh" + "</span>");
-    })
+    });
 
   // Returns arcs for pie-slices
   var arc = d3.arc()
@@ -275,7 +276,9 @@ function loadDataPie() {
   // Returns start and end angles for arcs
   var pie = d3.pie()
     .sort(null)
-    .value(function(d) { return parseInt(d.Quantity); });
+    .value(function(d) {
+      return parseInt(d.Quantity);
+    });
 
   pieData = pie(filterData("pie"));
 
@@ -284,24 +287,24 @@ function loadDataPie() {
   // Returns angle for rotation-translation
   var getAngle = function (d) {
       return (180 / Math.PI * (d.startAngle + d.endAngle) / 2 - 90);
-  }
+  };
 
   // Call the tooltip
-  d3.selectAll('.svgPie').call(toolTip)
+  d3.selectAll('.svgPie').call(toolTip);
 
   // Delete old arcs, if any
-  d3.selectAll(".arc").remove()
+  d3.selectAll(".arc").remove();
 
   // Adds arcs to svg
   var g = d3.select(".svgPie").selectAll(".arc")
      .data(pieData)
-   .enter().append("g")
-     .attr("class", "arc")
-     .attr("transform", ("translate(" + svgWidth / 2 + " "
-           + svgHeight / 2 + ")"));
+     .enter().append("g")
+       .attr("class", "arc")
+       .attr("transform", ("translate(" + svgWidth / 2 + " "
+             + svgHeight / 2 + ")"));
 
   // Removes old arc-paths, if any
-  d3.selectAll(".piePath").remove()
+  d3.selectAll(".piePath").remove();
 
   // Adds paths to arcs and gives color based of item-value
   g.append("path")
@@ -315,7 +318,7 @@ function loadDataPie() {
     		var interPol = d3.interpolate(d.startAngle, d.endAngle);
     		return function(t) {
     			d.endAngle = interPol(t);
-    			return arc(d)
+    			return arc(d);
     			}
     		});
 
@@ -325,7 +328,7 @@ function loadDataPie() {
     // When slice is clicked, reload map, line-chart2 and titles
     .on("click", function(d) {
       categoryOption = d.data.categoryTag;
-      document.getElementById("mySelect").value = categoryOption
+      document.getElementById("mySelect").value = categoryOption;
       loadDataMap();
       loadDataLine2();
       addTitles();
@@ -335,21 +338,21 @@ function loadDataPie() {
      .on("mouseover", function(d) {
        toolTip.show(d)
          .style("left", `${d3.event.pageX}px`)
-         .style("top", `${d3.event.pageY - 50}px`)
+         .style("top", `${d3.event.pageY - 50}px`);
 
        d3.select(this)
          .style("stroke", "black")
-         .style("stroke-width", "2px")
+         .style("stroke-width", "2px");
      })
 
      // Hide tooltip and accent when hover-over stops
      .on("mouseout", function() {
-       toolTip.hide()
+       toolTip.hide();
 
        d3.select(this)
          .style("stroke", "black")
-         .style("stroke-width", ".5px")
-     })
+         .style("stroke-width", ".5px");
+     });
 
   // Add labels to slices
   g.append("text")
@@ -384,14 +387,14 @@ function loadDataPie() {
      .style("font-weight", "bold");
 }
 
-
+// Initializes container for linechart-1
 function initializeLine1Container() {
 
   // Remoce old svg
   d3.select(".line1").remove();
 
   // Get correct values needed for linechart
-  var dataLine1 = filterData("line1")
+  var dataLine1 = filterData("line1");
 
   var yValues = getValues(dataLine1, categoryOption);
 
@@ -412,10 +415,10 @@ function initializeLine1Container() {
     .attr("height", `${svgHeight}`)
     .attr("class", "line1")
     .append("g")
-    .attr("transform", `translate(${svgWidth * 0.15} 10)`)
+      .attr("transform", `translate(${svgWidth * 0.15} 10)`);
 
   // Add g elemet to append lines to
-  svgLine1.append("g").attr("class", "lines")
+  svgLine1.append("g").attr("class", "lines");
 
   // X-axis, since this is constant troughout all data
   var xAxis = d3.axisBottom(xScale).ticks(5).tickFormat(d3.format("0"));
@@ -426,31 +429,31 @@ function initializeLine1Container() {
     .attr("transform", `translate(0 ${heightLine1})`)
     .call(xAxis)
     .append("text")
-    .attr("x", widthLine1 * .85 / 2)
-    .attr("y", 30)
-    .attr("fill", "#000")
-    .text("Years");
+      .attr("x", widthLine1 * .85 / 2)
+      .attr("y", 30)
+      .attr("fill", "#000")
+      .text("Years");
 
   svgLine1.append("g")
     .attr("class", "yAxis1")
     .append("text")
-    .attr("y", 15)
-    .attr("transform", "rotate(-90)")
-    .attr("fill", "#000")
-    .text("Million kWh");
+      .attr("y", 15)
+      .attr("transform", "rotate(-90)")
+      .attr("fill", "#000")
+      .text("Million kWh");
 
   // Load first data shown in linechart-1
   loadDataLine1();
-  }
+}
 
-
+// Loads relevant data for linechart-1 and makes lines/dots
 function loadDataLine1() {
 
   // Remove old line-groups, if any
-  d3.selectAll(".line-group1").remove()
+  d3.selectAll(".line-group1").remove();
 
   // Get relevant values needed for linechart
-  var dataLine1 = filterData("line1")
+  var dataLine1 = filterData("line1");
 
   var yValues = getValues(dataLine1, categoryOption);
 
@@ -469,8 +472,8 @@ function loadDataLine1() {
 
   // Gives coordinates the line should follow
   var line = d3.line()
-  .x(d => xScale(d.Year))
-  .y(d => yScale(d.Quantity));
+    .x(d => xScale(d.Year))
+    .y(d => yScale(d.Quantity));
 
 
   // From https://bl.ocks.org/mbostock/5649592
@@ -479,13 +482,14 @@ function loadDataLine1() {
     path.transition()
         .duration(750)
         .attrTween("stroke-dasharray", tweenDash);
-    }
-    function tweenDash() {
-        var l = this.getTotalLength(),
-          i = d3.interpolateString("0," + l, l + "," + l);
-        return function (t) {
-          return i(t); };
-    }
+    };
+
+  function tweenDash() {
+      var l = this.getTotalLength(),
+        i = d3.interpolateString("0," + l, l + "," + l);
+      return function (t) {
+        return i(t); };
+    };
 
   // Add lines-groups and line-paths
   var lines = d3.select(".lines")
@@ -494,7 +498,7 @@ function loadDataLine1() {
     .append('g')
       .attr('class', 'line-group1')
     .append('path')
-    .attr('class', 'lineLine1')
+      .attr('class', 'lineLine1');
 
   // Tooltip showing region, year and category values, bound to dots
   var toolTipDot = d3.tip()
@@ -502,20 +506,20 @@ function loadDataLine1() {
     .html(function(d) {
       return ("<span class='toolInfo'>" + d.categoryTag + "<br/>" + d.Year
               + ": " + d.Quantity  + " GWh " + "</span>");
-    })
+    });
 
   // Tooltip showing only region information, bound to line
   var toolTipLine = d3.tip()
     .offset([-10, 0])
     .html(function(d) {
       return "<span class='toolInfo'>" + d + "</span>";
-    })
+    });
 
   // Call tooltips
-  d3.select(".line1").call(toolTipDot)
-  d3.select(".line1").call(toolTipLine)
+  d3.select(".line1").call(toolTipDot);
+  d3.select(".line1").call(toolTipLine);
 
-  var maxValue = getMaxValue(dataLine1)
+  var maxValue = getMaxValue(dataLine1);
 
   // Give values to lines
   d3.selectAll(".lineLine1").data(dataLine1)
@@ -535,48 +539,52 @@ function loadDataLine1() {
     .on("mouseover", function(d){
       toolTipLine.show(d.categoryTag)
         .style("left", `${d3.event.pageX}px`)
-        .style("top", `${d3.event.pageY - 50}px`)
+        .style("top", `${d3.event.pageY - 50}px`);
       d3.select(this)
         .style("stroke", "#74ffb0")
-        .style("stroke-width", "4px")
+        .style("stroke-width", "4px");
     })
 
     // Hide tooltip and accentuation
     .on("mouseout", function() {
-      toolTipLine.hide()
+      toolTipLine.hide();
       d3.select(this)
         .style("stroke", function(d) {
-          return colorFunction(maxValue, getMeanValue(d.values))
+          return colorFunction(maxValue, getMeanValue(d.values));
         })
-        .style("stroke-width", "4px")
-    })
+        .style("stroke-width", "4px");
+    });
 
   // Remove old dots, if any
-  d3.selectAll(".circle").remove()
+  d3.selectAll(".circle").remove();
 
   // Variable to remember linecolor of accantuated line
   var parentColor = null;
 
   // Add circles to lines
   d3.selectAll(".line-group1").selectAll(".circle")
-    .data(function(d) { return d.values })
+    .data(function(d) {
+      return d.values;
+    })
     .enter()
     .append("circle")
       .attr("class", "circle")
       .attr("r",3)
       .attr("cx", function(d) {
-        return xScale(d.Year) })
+        return xScale(d.Year);
+      })
       .attr("cy", function(d) {
-        return yScale(d.Quantity) })
+        return yScale(d.Quantity);
+      })
       .attr("fill", function(d) {
-        return d3.select(this.parentNode).select(".lineLine1").style("stroke")
+        return d3.select(this.parentNode).select(".lineLine1").style("stroke");
       })
 
       // On hover-over, show tooltip and accentuate dots
       .on("mouseover", function(d) {
-        toolTipDot.show(d)
-        .style("left", `${d3.event.pageX}px`)
-        .style("top", `${d3.event.pageY - 50}px`)
+        toolTipDot.show(d);
+          .style("left", `${d3.event.pageX}px`)
+          .style("top", `${d3.event.pageY - 50}px`);
         parentColor = d3.select(this.parentNode).select(".lineLine1")
           .style("stroke");
         d3.select(this.parentNode).select(".lineLine1")
@@ -585,24 +593,24 @@ function loadDataLine1() {
 
       // Hides tooltip and accentuation
       .on("mouseout", function(d) {
-        toolTipDot.hide()
+        toolTipDot.hide();
         d3.select(this.parentNode).select(".lineLine1")
           .style("stroke", parentColor);
-      })
+      });
 
   // Add Y-axis to chart
   var yAxis = d3.axisLeft(yScale).ticks(5);
-  d3.select(".yAxis1").call(yAxis)
+  d3.select(".yAxis1").call(yAxis);
 }
 
-
+// Initializes container for linechart-2
 function initializeLine2Container() {
 
   // Remove old linechart-2-svg
   d3.selectAll(".line2").remove();
 
   // Get relevant values for linechart-2
-  var dataLine2 = filterData("line2")
+  var dataLine2 = filterData("line2");
 
   var yValues = getValues(dataLine2, categoryOption);
 
@@ -622,17 +630,17 @@ function initializeLine2Container() {
 
   // Returns coordinates for lines
   var line2 = d3.line()
-  .x(d => xScale(d.Year))
-  .y(d => yScale(d.Quantity));
+    .x(d => xScale(d.Year))
+    .y(d => yScale(d.Quantity));
 
   // Add svg
   var svgLine2 = d3.select("#line2Div")
     .append("svg")
-    .attr("width", `${svgWidth}`)
-    .attr("height", `${svgHeight}`)
-    .attr("class", "line2")
-    .append("g")
-    .attr("transform", `translate(${svgWidth * 0.15} 10)`)
+      .attr("width", `${svgWidth}`)
+      .attr("height", `${svgHeight}`)
+      .attr("class", "line2")
+      .append("g")
+        .attr("transform", `translate(${svgWidth * 0.15} 10)`);
 
   // Make axes
   var xAxis = d3.axisBottom(xScale).ticks(5).tickFormat(d3.format("0"));
@@ -645,25 +653,25 @@ function initializeLine2Container() {
     .attr("transform", `translate(0 ${heightLine2})`)
     .call(xAxis)
     .append("text")
-    .attr("x", widthLine2 * .85 / 2)
-    .attr("y", 30)
-    .attr("fill", "#000")
-    .text("Years");
+      .attr("x", widthLine2 * .85 / 2)
+      .attr("y", 30)
+      .attr("fill", "#000")
+      .text("Years");
 
   svgLine2.append("g")
     .attr("class", "yAxis2")
     .call(yAxis)
     .append('text')
-    .attr("y", 15)
-    .attr("transform", "rotate(-90)")
-    .attr("fill", "#000")
-    .text("Million kWh");
+      .attr("y", 15)
+      .attr("transform", "rotate(-90)")
+      .attr("fill", "#000")
+      .text("Million kWh");
 
   // Load first data shown in linechart-2
   loadDataLine2();
 }
 
-
+// Loads relevant data for linechart-2 and makes lines/dots
 function loadDataLine2() {
 
   // Remove old line-groups, if any
@@ -691,8 +699,8 @@ function loadDataLine2() {
 
   // Returns line coordinates
   var line2 = d3.line()
-  .x(d => xScale(d.Year))
-  .y(d => yScale(d.Quantity));
+    .x(d => xScale(d.Year))
+    .y(d => yScale(d.Quantity));
 
   // Make Y-axis
   var yAxis = d3.axisLeft(yScale).ticks(5);
@@ -703,7 +711,7 @@ function loadDataLine2() {
     path.transition()
         .duration(750)
         .attrTween("stroke-dasharray", tweenDash);
-    }
+    };
 
   function tweenDash() {
       var l = this.getTotalLength(),
@@ -711,7 +719,7 @@ function loadDataLine2() {
       return function(t) {
         return i(t);
       };
-    }
+    };
 
   // Add line-groups to svg
   var lines = d3.select(".line2").append("g").attr("class", "lines")
@@ -723,35 +731,35 @@ function loadDataLine2() {
 
     // Add paths to line-groups with coordinates
     .append('path')
-    .attr('class', 'PathLine2')
-    .attr('d', d => line2(d.values))
-    .call(transition)
-    .style('stroke', "black")
-    .style("stroke-width", "3px")
-    .style("fill", "transparent")
+      .attr('class', 'PathLine2')
+      .attr('d', d => line2(d.values))
+      .call(transition)
+      .style('stroke', "black")
+      .style("stroke-width", "3px")
+      .style("fill", "transparent");
 
-  var maxValue = getMaxValue(dataLine2)
+  var maxValue = getMaxValue(dataLine2);
 
   // Get Mean and max (different from functions used by line1)
   function getMaxValue(data) {
-    bigValuesList = []
+    bigValuesList = [];
     for (cat of data) {
       smallValuesList = [];
       for (value of cat.values) {
-        smallValuesList.push(value.Quantity)
+        smallValuesList.push(value.Quantity);
       }
-      bigValuesList.push(d3.mean(smallValuesList))
+      bigValuesList.push(d3.mean(smallValuesList));
     }
-    return Math.max.apply(Math, bigValuesList)
-  }
+    return Math.max.apply(Math, bigValuesList);
+  };
 
   function getMeanValue(values) {
     smallValuesList = [];
     for (value of Object.values(values.values)) {
-      smallValuesList.push(value.Quantity)
+      smallValuesList.push(value.Quantity);
     }
-    return d3.mean(smallValuesList)
-  }
+    return d3.mean(smallValuesList);
+  };
 
   // Tooltip showing region, year and value, bound to dots
   var toolTipDot = d3.tip()
@@ -760,7 +768,7 @@ function loadDataLine2() {
     .html(function(d) {
       return ("<span class='toolInfo'>" + d.Region + "<br/>" + d.Year + ": "
               + Math.round(d.Quantity) + " GWh "+ "</span>");
-    })
+    });
 
   // Tooltip showing region, bound to lines
   var toolTipLine = d3.tip()
@@ -777,58 +785,62 @@ function loadDataLine2() {
   // Add add coordinates and correct colors
   d3.selectAll(".PathLine2").data(dataLine2).attr('d', d => line2(d.values))
     .style("stroke", function (d, i) {
-      return colorFunction(maxValue, getMeanValue(d))
+      return colorFunction(maxValue, getMeanValue(d));
     });
 
   // Call Y-axis
-  d3.select(".yAxis2").call(yAxis)
+  d3.select(".yAxis2").call(yAxis);
 
   // Add tooltip and accentuation to lines
   d3.selectAll(".PathLine2")
     .on("mouseover", function(d){
       toolTipLine.show(d)
         .style("left", `${d3.event.pageX}px`)
-        .style("top", `${d3.event.pageY - 50}px`)
+        .style("top", `${d3.event.pageY - 50}px`);
       d3.select(this)
         .style("stroke", "#74ffb0")
-        .style("stroke-width", "4px")
+        .style("stroke-width", "4px");
     })
     .on("mouseout", function() {
-      toolTipLine.hide()
+      toolTipLine.hide();
       d3.select(this)
         .style("stroke", function(d) {
-          return colorFunction(maxValue, getMeanValue(d))
+          return colorFunction(maxValue, getMeanValue(d));
         })
-        .style("stroke-width", "4px")
+        .style("stroke-width", "4px");
     });
 
   // Remove old dots, if any
-  d3.selectAll(".circle2").remove()
+  d3.selectAll(".circle2").remove();
 
   // Variable to save color of line before accentuation
   var parentColor = null;
 
   // Add dots to lines
   d3.selectAll(".line-group2").selectAll(".circle2")
-    .data(function(d) { return d.values })
+    .data(function(d) {
+      return d.values;
+    });
     .enter()
     .append("circle")
       .attr("class", "circle2")
       .attr("r",3)
       .attr("cx", function(d) {
-        return xScale(d.Year) })
+        return xScale(d.Year);
+      })
       .attr("cy", function(d) {
-        return yScale(d.Quantity) })
+        return yScale(d.Quantity);
+      })
       .attr("fill", function(d) {
-        return d3.select(this.parentNode).select(".PathLine2").style("stroke")
+        return d3.select(this.parentNode).select(".PathLine2").style("stroke");
       })
 
       // Show tooltip and accentuations
       .on("mouseover", function(d) {
-        toolTipDot.show(d)
-        .style("left", `${d3.event.pageX}px`)
-        .style("top", `${d3.event.pageY - 50}px`)
-        parentColor = d3.select(this.parentNode).select(".PathLine2")
+        toolTipDot.show(d);
+          .style("left", `${d3.event.pageX}px`)
+          .style("top", `${d3.event.pageY - 50}px`);
+        parentColor = d3.select(this.parentNode).select(".PathLine2");
           .style("stroke");
 
         d3.select(this.parentNode).select(".PathLine2")
@@ -837,7 +849,7 @@ function loadDataLine2() {
 
       // Hide tooltip and accentuation
       .on("mouseout", function(d) {
-        toolTipDot.hide()
+        toolTipDot.hide();
         d3.select(this.parentNode).select(".PathLine2")
           .style("stroke", parentColor);
       });
@@ -848,8 +860,8 @@ function initializeSlider() {
 
   // Add p element for slider
   var sliderP = d3.select("#mapDiv").append("p").attr("class", "sliderP")
-  .style("position", "absolute")
-  .style("top", "25px")
+    .style("position", "absolute")
+    .style("top", "25px");
 
   // Add range-input tag (slider)
   var slider = sliderP.append("input")
@@ -857,7 +869,7 @@ function initializeSlider() {
     .attr("type", "range")
     .attr("id", "mySlider")
     .attr("min", "1995")
-    .attr("max", "2014")
+    .attr("max", "2014");
 
   // Set defaultValue to 2000
   document.getElementById("mySlider").defaultValue = 2000;
@@ -865,7 +877,7 @@ function initializeSlider() {
   // When slider-value is changed, reload map, piechart and titles
   slider.on("change", function(d) {
     yearOption = mySlider.value;
-    loadDataMap()
+    loadDataMap();
     loadDataPie();
     addTitles();
   })
@@ -877,8 +889,8 @@ function initializeSlider() {
     .style("left", "135px")
     .style("background", "white")
     .attr("rx", 10)
-    .text(`${mySlider.value}`)
-};
+    .text(`${mySlider.value}`);
+}
 
 // Adds options to category-select-tag in the navigation bar
 function categoryOptions () {
@@ -886,7 +898,7 @@ function categoryOptions () {
   // Append 7 option tags
   for (var i = 0; i < 7; i++) {
     d3.select("select")
-      .append("option")
+      .append("option");
   };
 
   // Add data to option=tags as values and text
@@ -898,10 +910,8 @@ function categoryOptions () {
     })
     .text(function(d) {
       return d;
-    })
+    });
 }
-
-
 
 // Returns relevant values for each chart
 function filterData(spec) {
@@ -923,7 +933,7 @@ function filterData(spec) {
   else if (spec == "pie") {
     var groupISO = _.groupBy(allData, obj => obj.ISO);
     groupISO = _.groupBy(groupISO[countryOption], obj => obj.Year);
-    return groupISO[yearOption]
+    return groupISO[yearOption];
   }
 
   // Selects data for linechart 1
@@ -934,7 +944,7 @@ function filterData(spec) {
     for (var i in Object.values(groupCat)) {
       sorted = Object.values(groupCat)[i].sort((a, b) => (a.Year > b.Year)
                                                ? 1 : -1);
-      array.push({"categoryTag": Object.keys(groupCat)[i], "values": sorted})
+      array.push({"categoryTag": Object.keys(groupCat)[i], "values": sorted});
     }
     return array;
   }
@@ -946,13 +956,13 @@ function filterData(spec) {
     var groupRegion =  _.groupBy(groupCat[categoryOption], obj => obj.Region);
     for (var index in Object.values(groupRegion)) {
       regionArray = [];
-      key = Object.keys(groupRegion)[index]
-      value = Object.values(groupRegion)[index]
+      key = Object.keys(groupRegion)[index];
+      value = Object.values(groupRegion)[index];
       var groupYear =  _.groupBy(value, obj => obj.Year);
       for (var yearIndex in groupYear) {
         sum = 0;
         for (var elem of groupYear[yearIndex]) {
-          sum += elem.Quantity
+          sum += elem.Quantity;
         }
         regionArray.push({"Year": parseInt(yearIndex), "Quantity": sum,
                           "Region": elem.Region});
@@ -964,14 +974,14 @@ function filterData(spec) {
     }
     return totalArray;
   }
-};
+}
 
 // Returns color based of gradient
 function colorFunction(maxValue, d) {
   // from: https://blockbuilder.org/SpaceActuary/69e7f74035787955bcf9
   var color = d3.scaleQuantize()
-      .domain([0, maxValue])
-      .range(blues);
+    .domain([0, maxValue])
+    .range(blues);
 
   return color(d);
 }
@@ -981,7 +991,7 @@ function getValues(data, option) {
   valueList = [];
   for (var cat of Object.values(data)) {
     for (var object of Object.values(cat.values)) {
-      valueList.push(object.Quantity)
+      valueList.push(object.Quantity);
     }
   }
   return valueList;
@@ -999,43 +1009,43 @@ function convert() {
 
 // Gives maximal value of a given array
 function getMaxValue(data) {
-  bigValuesList = []
+  bigValuesList = [];
   for (cat of data) {
     smallValuesList = [];
     for (value of cat.values) {
-      smallValuesList.push(value.Quantity)
+      smallValuesList.push(value.Quantity);
     }
-    bigValuesList.push(d3.mean(smallValuesList))
+    bigValuesList.push(d3.mean(smallValuesList));
   }
-  return Math.max.apply(Math, bigValuesList)
+  return Math.max.apply(Math, bigValuesList);
 }
 
 // Returns average value of a given array
 function getMeanValue(values) {
   smallValuesList = [];
   for (value of values) {
-    smallValuesList.push(value.Quantity)
+    smallValuesList.push(value.Quantity);
   }
-  return d3.mean(smallValuesList)
+  return d3.mean(smallValuesList);
 }
 
 // Initializes chart-title-divs
 function initializeTitles() {
   d3.select("#mapDiv")
-  .append("div")
-  .attr("class", "mapTextDiv")
+    .append("div")
+      .attr("class", "mapTextDiv");
 
   d3.select("#pieDiv")
-  .append("div")
-  .attr("class", "pieTextDiv")
+    .append("div")
+      .attr("class", "pieTextDiv");
 
   d3.select("#line1Div")
-  .append("div")
-  .attr("class", "line1TextDiv")
+    .append("div")
+      .attr("class", "line1TextDiv");
 
   d3.select("#line2Div")
-  .append("div")
-  .attr("class", "line2TextDiv")
+    .append("div")
+      .attr("class", "line2TextDiv");
 }
 
 // Adds titles to divs
@@ -1043,22 +1053,22 @@ function addTitles() {
   d3.select(".mapTextDiv")
   .text(`Map Chart Showing ${categoryOption} per Country in ${yearOption}`)
     .style("vertical-align", "middle").style("text-align", "center")
-    .attr("id", "mapText")
+    .attr("id", "mapText");
 
   d3.select(".pieTextDiv")
   .text(`Pie Chart Showing Different Categories for ${countryName}`
         + ` in ${yearOption}`)
     .style("vertical-align", "middle").style("text-align", "center")
-    .attr("id", "pieText")
+    .attr("id", "pieText");
 
   d3.select(".line1TextDiv")
   .text(`Line Graph Showing Different Categories for ${countryName} over Time`)
     .style("vertical-align", "middle").style("text-align", "center")
-    .attr("id", "line1Text")
+    .attr("id", "line1Text");
 
   d3.select(".line2TextDiv")
   .text(`Line Graph Showing ${categoryOption} Values for Different Regions `
         + `over Time`)
     .style("vertical-align", "middle").style("text-align", "center")
-    .attr("id", "line2Text")
+    .attr("id", "line2Text");
 }
