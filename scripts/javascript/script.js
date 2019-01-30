@@ -1,4 +1,4 @@
-const fileName = "json.json"
+const fileName = "data/json.json"
 const data = [];
 
 var categoryOption = "Combustion";
@@ -76,7 +76,7 @@ function initializeMapContainer() {
       .append("g")
       .attr("class", "gMap")
 
-  var topojson = Promise.resolve(d3.json("world_countries.json"));
+  var topojson = Promise.resolve(d3.json("data/world_countries.json"));
   topojson.then(function(value) {
 
     var projection = d3.geoMercator()
