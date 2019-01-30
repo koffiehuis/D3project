@@ -513,7 +513,7 @@ function loadDataLine1() {
   d3.select(".line1").call(toolTipDot)
   d3.select(".line1").call(toolTipLine)
 
-  var maxValue = getHighestValue(dataLine1)
+  var maxValue = getMaxValue(dataLine1)
 
   // Give values to lines
   d3.selectAll(".lineLine1").data(dataLine1)
@@ -725,10 +725,10 @@ function loadDataLine2() {
     .style("stroke-width", "3px")
     .style("fill", "transparent")
 
-  var maxValue = getHighestValue(dataLine2)
+  var maxValue = getMaxValue(dataLine2)
 
   // Get Mean and max (different from functions used by line1)
-  function getHighestValue(data) {
+  function getMaxValue(data) {
     bigValuesList = []
     for (cat of data) {
       smallValuesList = [];
@@ -894,9 +894,11 @@ function categoryOptions () {
 
 
 
-
+// Returns relevant values for each chart
 function filterData(spec) {
   var allData = data[0]
+
+  // Selects data for worldmap
   if (spec == "worldmap") {
     regionDict = {};
     var groupCategory = _.groupBy(allData, obj => obj.categoryTag);
@@ -908,12 +910,14 @@ function filterData(spec) {
     return regionDict;
   }
 
+  // Selects data for piechart
   else if (spec == "pie") {
     var groupISO = _.groupBy(allData, obj => obj.ISO);
     groupISO = _.groupBy(groupISO[countryOption], obj => obj.Year);
     return groupISO[yearOption]
   }
 
+  // Selects data for linechart 1
   else if  (spec == "line1") {
     var groupCountry = _.groupBy(allData, obj => obj.ISO);
     var groupCategory = _.groupBy(groupCountry[countryOption], obj => obj.categoryTag);
@@ -925,6 +929,7 @@ function filterData(spec) {
     return array;
   }
 
+  // Selects data for linechart2
   else if (spec == "line2") {
     var groupCategory = _.groupBy(allData, obj => obj.categoryTag);
     totalArray = [];
@@ -947,9 +952,9 @@ function filterData(spec) {
     }
     return totalArray;
   }
-}
+};
 
-
+// Returns color based of gradient
 function colorFunction(maxValue, d) {
   // from: https://blockbuilder.org/SpaceActuary/69e7f74035787955bcf9
   var color = d3.scaleQuantize()
@@ -959,7 +964,7 @@ function colorFunction(maxValue, d) {
   return color(d);
 }
 
-
+// Returns all quantity values of objects
 function getValues(data, option) {
   valueList = [];
   for (var cat of Object.values(data)) {
@@ -970,7 +975,7 @@ function getValues(data, option) {
   return valueList;
 }
 
-
+// Parses turns numeric strings into ints/floats
 function convert() {
   newData = [];
   for (var index in Object.values(data)[0]) {
@@ -980,8 +985,8 @@ function convert() {
   }
 }
 
-
-function getHighestValue(data) {
+// Gives maximal value of a given array
+function getMaxValue(data) {
   bigValuesList = []
   for (cat of data) {
     smallValuesList = [];
@@ -993,7 +998,7 @@ function getHighestValue(data) {
   return Math.max.apply(Math, bigValuesList)
 }
 
-
+// Returns average value of a given array
 function getMeanValue(values) {
   smallValuesList = [];
   for (value of values) {
@@ -1002,7 +1007,7 @@ function getMeanValue(values) {
   return d3.mean(smallValuesList)
 }
 
-
+// Initializes chart-title-divs
 function initializeTitles() {
   d3.select("#mapDiv")
   .append("div")
@@ -1021,7 +1026,7 @@ function initializeTitles() {
   .attr("class", "line2TextDiv")
 }
 
-
+// Adds titles to divs
 function addTitles() {
   d3.select(".mapTextDiv")
   .text(`Map Chart Showing ${categoryOption} per Country in ${yearOption}`).style("vertical-align", "middle").style("text-align", "center")
