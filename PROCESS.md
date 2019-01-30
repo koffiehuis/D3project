@@ -46,3 +46,15 @@ Beta version: Added tooltips, implemented new colors on every chart (blue only),
 
 # Day 14
 Beta version: Added dots to line charts
+
+# Day 16
+Final version: Legend worldmap, apply color scheme to all charts
+
+# Day 17
+Final version: Finally fix preprocessing
+
+# Day 18
+Final version: Add transitions, fix "About" page, update dots of linechart2, let select tag show click value
+
+# Day 19
+Final version: Fix github and github pages, X axis labels, final touches
