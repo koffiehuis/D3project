@@ -849,21 +849,23 @@ function initializeSlider() {
     addTitles();
   })
 
+  // Add label and text, showing selected year
   var label = d3.select(".sliderP").append("label")
     .style("position", "absolute")
     .style("top", "2.5px")
     .style("left", "135px")
     .style("background", "white")
     .attr("rx", 10)
+    .text(`${value}`)
 
 
-  showSliderValue(mySlider.value)
-
-  function showSliderValue(value) {
-    label.text(`${value}`)
-
-    yearOption = value;
-  }
+  // showSliderValue(mySlider.value)
+  //
+  // function showSliderValue(value) {
+  //   label.text(`${value}`)
+  //
+  //   yearOption = value;
+  // }
 
   function categoryOptions () {
     for (var i = 0; i < 7; i++) {
