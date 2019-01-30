@@ -5,6 +5,8 @@
 
 // Main script
 
+
+// Initialize global variables
 const fileName = "data/json.json"
 const data = [];
 
@@ -18,10 +20,11 @@ const svgHeight = "350";
 
 const blues = colorbrewer.Blues[9]
 
+// Load JSON with preprocessed data and initialize all elements
 window.onload = function() {
-
-
   var dataArray = [];
+
+  // Fetch data and push to array
   fetch(fileName)
     .then((response) => response.json())
     .then((rawData) => {
@@ -30,22 +33,29 @@ window.onload = function() {
       }
       data.push(dataArray);
 
+  // Convert numberical values from string to int/float
   convert();
+
+  // Add titles
   initializeTitles()
   addTitles()
+
+  // Initialize chart containers
   initializeMapContainer()
   initializePieContainer()
   initializeLine1Container()
   initializeLine2Container()
+
+  // Initialize year-slider
   initializeSlider()
 
-
+  // Deal with errors
   }).catch(function(e){
       throw(e);
   });
 };
 
-
+// Make chart size dependable on window size
 window.onresize = function() {
   svgWidth = document.getElementById("mapDiv").offsetWidth;
   initializeMapContainer()
@@ -54,14 +64,19 @@ window.onresize = function() {
   initializeLine2Container()
 }
 
-
+// Initializes worldmap
 function initializeMapContainer() {
+
+  // Remove previous worldmap-svg
   d3.select(".svgMap").remove();
+
   var width = svgWidth,
   height = "350";
 
+  // Path for countries on worldmap
   var path = d3.geoPath();
 
+  // Make svg
   var svgMap = d3.select("#mapDiv").append("svg")
       .attr("width", width + 30)
       .attr("height", height)
@@ -70,6 +85,7 @@ function initializeMapContainer() {
       .append("g")
       .attr("class", "gMap")
 
+  // Load worldmap data, then make worlddmap
   var topojson = Promise.resolve(d3.json("data/world_countries.json"));
   topojson.then(function(value) {
 
@@ -79,7 +95,7 @@ function initializeMapContainer() {
 
     var path = d3.geoPath().projection(projection);
 
-
+    // Add countries to worldmap
     svgMap.append("g").attr("class", "countries")
       .selectAll("path")
       .data(value.features)
@@ -88,30 +104,44 @@ function initializeMapContainer() {
       .attr("d", path)
       .attr("class", "countryPath")
       .style("stroke", "#7F7F7F")
+
+      // If a country is clicked reload piechart and linechart 1
       .on("click", function(d) {
+
+        // Give user alers if country with no data is selected
         if (d3.select(this).style("fill") == "rgb(0, 0, 0)") {
           alert(`No data for ${categoryOption} as a source for energy in ${d.properties.name}`)
         }
+
+        // Change global settings
         countryOption = d.id;
         countryName = d.properties.name;
+
+        // Reload relevant elements
         loadDataPie();
         loadDataLine1();
         addTitles();
       })
 
+    // Load electricity-data to map
     loadDataMap();
 })
 }
 
-
+// Loads data to worldmap
 function loadDataMap() {
+
+  // Remove old legend
   d3.select(".mapLegend").remove();
+
+  // Get all relevant values for each country
+  var dataMap = filterData("worldmap")
+
   valueArray = [];
-  for (var elem of Object.values(filterData("worldmap"))) {
+  for (var elem of Object.values(dataMap)) {
     valueArray.push(elem)
   }
 
-  var dataMap = filterData("worldmap")
 
 
   var toolTip = d3.tip()
@@ -156,7 +186,7 @@ function loadDataMap() {
 
 
   var legendQuantize = d3.legendColor()
-  	.classPrefix("colorLegend_")
+  	.classPrefix("colorLegend")
     .labelFormat(d3.format(".2s"))
   	.shape("rect")
     .scale(quantize);
