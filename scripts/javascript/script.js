@@ -954,10 +954,12 @@ function filterData(spec) {
         for (var elem of groupYear[yearIndex]) {
           sum += elem.Quantity
         }
-        regionArray.push({"Year": parseInt(yearIndex), "Quantity": sum, "Region": elem.Region})
+        regionArray.push({"Year": parseInt(yearIndex), "Quantity": sum,
+                          "Region": elem.Region});
       }
       if (Object.keys(groupRegion)[index] != "null") {
-        totalArray.push({"Region": Object.keys(groupRegion)[index], "values": regionArray})
+        totalArray.push({"Region": Object.keys(groupRegion)[index],
+                         "values": regionArray});
       }
     }
     return totalArray;
@@ -1039,18 +1041,24 @@ function initializeTitles() {
 // Adds titles to divs
 function addTitles() {
   d3.select(".mapTextDiv")
-  .text(`Map Chart Showing ${categoryOption} per Country in ${yearOption}`).style("vertical-align", "middle").style("text-align", "center")
-  .attr("id", "mapText")
+  .text(`Map Chart Showing ${categoryOption} per Country in ${yearOption}`)
+    .style("vertical-align", "middle").style("text-align", "center")
+    .attr("id", "mapText")
 
   d3.select(".pieTextDiv")
-  .text(`Pie Chart Showing Different Categories for ${countryName} in ${yearOption}`).style("vertical-align", "middle").style("text-align", "center")
-  .attr("id", "pieText")
+  .text(`Pie Chart Showing Different Categories for ${countryName}`
+        + ` in ${yearOption}`)
+    .style("vertical-align", "middle").style("text-align", "center")
+    .attr("id", "pieText")
 
   d3.select(".line1TextDiv")
-  .text(`Line Graph Showing Different Categories for ${countryName} over Time`).style("vertical-align", "middle").style("text-align", "center")
-  .attr("id", "line1Text")
+  .text(`Line Graph Showing Different Categories for ${countryName} over Time`)
+    .style("vertical-align", "middle").style("text-align", "center")
+    .attr("id", "line1Text")
 
   d3.select(".line2TextDiv")
-  .text(`Line Graph Showing ${categoryOption} Values for Different Regions over Time`).style("vertical-align", "middle").style("text-align", "center")
-  .attr("id", "line2Text")
+  .text(`Line Graph Showing ${categoryOption} Values for Different Regions `
+        + `over Time`)
+    .style("vertical-align", "middle").style("text-align", "center")
+    .attr("id", "line2Text")
 }
