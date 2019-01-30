@@ -131,6 +131,19 @@ a:visited {
   color: #878787;
 }
 
+a {
+  text-align: center;
+  font: 15px Arial;
+  display: block;
+}
+
 p {
   text-align: center;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
 }
