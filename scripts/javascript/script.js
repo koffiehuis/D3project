@@ -111,7 +111,7 @@ function initializeMapContainer() {
         // Give user alers if country with no data is selected
         if (d3.select(this).style("fill") == "rgb(0, 0, 0)") {
           alert(`No data for ${categoryOption} as a source for energy in`
-                + `${d.properties.name}`)
+                + ` ${d.properties.name}`)
         }
 
         // Change global settings
@@ -168,7 +168,7 @@ function loadDataMap() {
   })
 
 
-
+  // Add mouseover events, tooltip and border color
   d3.selectAll(".countryPath").on("mouseover", function(d) {
     toolTip.show(d)
       .style("left", `${d3.event.pageX}px`)
@@ -184,7 +184,7 @@ function loadDataMap() {
       .style("stroke", "#7F7F7F")
   })
 
-
+  // Make legend for worldmap
   var legendQuantize = d3.legendColor()
   	.classPrefix("colorLegend")
     .labelFormat(d3.format(".2s"))
@@ -193,35 +193,33 @@ function loadDataMap() {
 
   d3.select(".gMap").append("g").attr("class", "mapLegend").call(legendQuantize)
     .attr("transform", `translate(${svgWidth - 75} 190)`)
-
-
-
-
 }
 
-
+// Initializes the piechart container
 function initializePieContainer() {
+
+  // Remove old container, if there is one
   d3.select(".svgPie").remove();
+
+  // Get relevant data
   var dataPie = filterData("pie");
+
+  // Set chart size
   var widthPie = svgWidth,
       heightPie = 350,
       radius = Math.min(widthPie, heightPie) / 3;
 
-
-
+  // Returns arcs of the circle for the piechart-slices
   var arc = d3.arc()
     .outerRadius(radius - 10)
     .innerRadius(0);
 
+  // Returns arcs of the circle piechart-labels
   var labelArc = d3.arc()
     .outerRadius(radius - 10)
     .innerRadius(radius - 10);
 
 
-// Source: https://stackoverflow.com/questions/14534024/preventing-overlap-of-text-in-d3-pie-chart
-var getAngle = function (d) {
-  return (180 / Math.PI * (d.startAngle + d.endAngle) / 2 - 90);
-}
 
   var pie = d3.pie()
     .sort(null)
@@ -277,6 +275,8 @@ function loadDataPie() {
 
   pieData = pie(filterData("pie"));
 
+  // Source: https://stackoverflow.com/questions/14534024/preventing-overlap-of-text-in-d3-pie-chart
+  // Returns angle for rotation-translation 
   var getAngle = function (d) {
       return (180 / Math.PI * (d.startAngle + d.endAngle) / 2 - 90);
   }
