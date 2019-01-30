@@ -11,7 +11,7 @@ Nowadays, as the effects of climate changes become more and more visible, renewa
 ### Solution
 To answer questions like these and provide a clear picture on the current changes, we have applied different visualisation tools. These tools are linked to provide an interactive page to work with and help answer all your questions concerning changes in electricity source management.
 
-<a href="url"><img src="https://raw.githubusercontent.com/koffiehuis/D3project/master/docs/project_page.png" align="left" height="300"  ></a><a href="url"><img src="https://raw.githubusercontent.com/koffiehuis/D3project/master/docs/project_page_small.png" align="left" height="300"  ></a><br>
+<a href="url"><img src="https://raw.githubusercontent.com/koffiehuis/D3project/master/docs/project_page.png" align="left" height="350"  ></a><a href="url"><img src="https://raw.githubusercontent.com/koffiehuis/D3project/master/docs/project_page_small.png" align="left" height="350"  ></a><br>
 
 *Print-screens of my page, before and after resizing*
 
