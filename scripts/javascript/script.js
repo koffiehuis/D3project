@@ -694,7 +694,7 @@ function loadDataLine2() {
       };
     }
 
-    // Add line-groups to svg
+  // Add line-groups to svg
   var lines = d3.select(".line2").append("g").attr("class", "lines")
   lines.selectAll(".line-group2")
     .data(dataLine2).enter()
@@ -711,11 +711,29 @@ function loadDataLine2() {
     .style("stroke-width", "3px")
     .style("fill", "transparent")
 
-
-
-
   var maxValue = getHighestValue(dataLine2)
 
+  function getHighestValue(data) {
+    bigValuesList = []
+    for (cat of data) {
+      smallValuesList = [];
+      for (value of cat.values) {
+        smallValuesList.push(value.Quantity)
+      }
+      bigValuesList.push(d3.mean(smallValuesList))
+    }
+    return Math.max.apply(Math, bigValuesList)
+  }
+
+  function getMeanValue(values) {
+    smallValuesList = [];
+    for (value of Object.values(values.values)) {
+      smallValuesList.push(value.Quantity)
+    }
+    return d3.mean(smallValuesList)
+  }
+
+  // Tooltip showing region, year and value, bound to dots
   var toolTipDot = d3.tip()
     .attr("class", "toolTip")
     .offset([-10, 0])
@@ -723,21 +741,28 @@ function loadDataLine2() {
       return "<span class='toolInfo'>" + d.Region + "<br/>" + d.Year + ": " + Math.round(d.Quantity) + " GWh "+ "</span>";
     })
 
+  // Tooltip showing region, bound to lines
   var toolTipLine = d3.tip()
     .attr("class", "toolTip")
     .offset([-10, 0])
     .html(function(d) {
       return "<span class='toolInfo'>" + d.Region + "</span>";
-    })
+    });
 
-    d3.select(".line2").call(toolTipDot)
-    d3.select(".line2").call(toolTipLine)
+  // Call tooltips
+  d3.select(".line2").call(toolTipDot);
+  d3.select(".line2").call(toolTipLine);
 
+  // Add add coordinates and correct colors
   d3.selectAll(".PathLine2").data(dataLine2).attr('d', d => line2(d.values))
-    .style("stroke", function (d, i) { return colorFunction(maxValue, getMeanValue(d)) } )
+    .style("stroke", function (d, i) {
+      return colorFunction(maxValue, getMeanValue(d))
+    });
 
+  // Call Y-axis
   d3.select(".yAxis2").call(yAxis)
 
+  // Add tooltip and accentuation to lines
   d3.selectAll(".PathLine2")
     .on("mouseover", function(d){
       toolTipLine.show(d)
@@ -754,12 +779,15 @@ function loadDataLine2() {
           return colorFunction(maxValue, getMeanValue(d))
         })
         .style("stroke-width", "4px")
-    })
+    });
 
+  // Remove old dots, if any
+  d3.selectAll(".circle2").remove()
 
-    d3.selectAll(".circle2").remove()
-
+  // Variable to save color of line before accentuation
   var parentColor = null;
+
+  // Add dots to lines
   d3.selectAll(".line-group2").selectAll(".circle2")
     .data(function(d) { return d.values })
     .enter()
@@ -773,6 +801,8 @@ function loadDataLine2() {
       .attr("fill", function(d) {
         return d3.select(this.parentNode).select(".PathLine2").style("stroke")
       })
+
+      // Show tooltip and accentuations
       .on("mouseover", function(d) {
         toolTipDot.show(d)
         .style("left", `${d3.event.pageX}px`)
@@ -782,10 +812,12 @@ function loadDataLine2() {
         d3.select(this.parentNode).select(".PathLine2").style("stroke", "#74ffb0")
 
       })
+
+      // Hide tooltip and accentuation
       .on("mouseout", function(d) {
         toolTipDot.hide()
         d3.select(this.parentNode).select(".PathLine2").style("stroke", parentColor)
-      })
+      });
 }
 
 
