@@ -68,6 +68,16 @@ window.onresize = function() {
   initializeLine2Container()
 }
 
+// If new category value is selected, reload relevant charts and titles
+d3.selectAll("select").on("change", function() {
+  var selected = document.getElementById("mySelect")
+  categoryOption = selected.options[selected.selectedIndex].value
+  loadDataMap();
+  loadDataPie();
+  loadDataLine2();
+  addTitles();
+})
+
 // Initializes worldmap
 function initializeMapContainer() {
 
@@ -846,7 +856,6 @@ function initializeSlider() {
 
   // When slider-value is changed, reload map, piechart and titles
   slider.on("change", function(d) {
-    showSliderValue(mySlider.value)
     yearOption = mySlider.value;
     loadDataMap()
     loadDataPie();
@@ -863,14 +872,16 @@ function initializeSlider() {
     .text(`${mySlider.value}`)
 };
 
+// Adds options to category-select-tag in the navigation bar
 function categoryOptions () {
+
+  // Append 7 option tags
   for (var i = 0; i < 7; i++) {
     d3.select("select")
       .append("option")
-      .attr("class", "option1")
-  }
+  };
 
-
+  // Add data to option=tags as values and text
   d3.selectAll("option")
     .data(["Choose worldmap category", "Hydro", "Solar", "Wind", "Combustion", "Nuclear", "Other", "Geothermal"])
     .attr("value", function(d) {
@@ -881,14 +892,7 @@ function categoryOptions () {
     })
 }
 
-d3.selectAll("select").on("change", function() {
-  var selected = document.getElementById("mySelect")
-  categoryOption = selected.options[selected.selectedIndex].value
-  loadDataMap();
-  loadDataPie();
-  loadDataLine2();
-  addTitles();
-})
+
 
 
 function filterData(spec) {
