@@ -932,7 +932,8 @@ function filterData(spec) {
     var groupCat = _.groupBy(groupCountry, obj => obj.categoryTag);
     array = [];
     for (var i in Object.values(groupCat)) {
-      sorted = Object.values(groupCat)[i].sort((a, b) => (a.Year > b.Year) ? 1 : -1)
+      sorted = Object.values(groupCat)[i].sort((a, b) => (a.Year > b.Year)
+                                               ? 1 : -1);
       array.push({"categoryTag": Object.keys(groupCat)[i], "values": sorted})
     }
     return array;
