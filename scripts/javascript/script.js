@@ -124,7 +124,7 @@ function initializeMapContainer() {
         addTitles();
       })
 
-    // Load electricity-data to map
+    // Load first data shown when loading page
     loadDataMap();
 })
 }
@@ -209,33 +209,18 @@ function initializePieContainer() {
       heightPie = 350,
       radius = Math.min(widthPie, heightPie) / 3;
 
-  // Returns arcs of the circle for the piechart-slices
-  var arc = d3.arc()
-    .outerRadius(radius - 10)
-    .innerRadius(0);
-
-  // Returns arcs of the circle piechart-labels
-  var labelArc = d3.arc()
-    .outerRadius(radius - 10)
-    .innerRadius(radius - 10);
-
-
-
-  var pie = d3.pie()
-    .sort(null)
-    . value(function(d) { return parseInt(d.Quantity); });
-
-
+  // Add svg
   var svgPie = d3.select("#pieDiv")
     .append("svg")
     .attr("class", "svgPie")
     .attr("width", `${svgWidth}`)
     .attr("height", `${svgHeight}`)
 
-   loadDataPie()
+  // Load first data shown when loading page
+  loadDataPie()
 }
 
-
+// Loads
 function loadDataPie() {
   var widthPie = svgWidth,
       heightPie = 350,
@@ -276,7 +261,7 @@ function loadDataPie() {
   pieData = pie(filterData("pie"));
 
   // Source: https://stackoverflow.com/questions/14534024/preventing-overlap-of-text-in-d3-pie-chart
-  // Returns angle for rotation-translation 
+  // Returns angle for rotation-translation
   var getAngle = function (d) {
       return (180 / Math.PI * (d.startAngle + d.endAngle) / 2 - 90);
   }
