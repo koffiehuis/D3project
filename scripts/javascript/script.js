@@ -820,7 +820,7 @@ function loadDataLine2() {
   d3.selectAll(".line-group2").selectAll(".circle2")
     .data(function(d) {
       return d.values;
-    });
+    })
     .enter()
     .append("circle")
       .attr("class", "circle2")
