@@ -356,6 +356,7 @@ function loadDataPie() {
 
   // Add labels to slices
   g.append("text")
+     .style("text-anchor", "end")
 
      // Puts labels in correct orientation
      .attr("transform", function(d) {
