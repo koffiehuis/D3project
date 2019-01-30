@@ -42,31 +42,6 @@
   border-right: 10px;
 }
 
-/* #mapDiv {
-  background-color: #DDDDDD;
-  border: 2px solid;
-}
-
-#pieDiv {
-  background-color: #DDDDDD;
-  border: 2px solid;
-}
-
-#line1Div {
-  background-color: #DDDDDD;
-  border: 2px solid;
-}
-
-#line2Div {
-  background-color: #DDDDDD;
-  border: 2px solid;
-} */
-
-/* svg.map g {
-  width: 100px;
-  height: 100px;
-
-} */
 .mand {
   position: relative;
 }
@@ -88,8 +63,7 @@ p {
   font: 15px Arial;
 }
 body {
-  /* background-color: white; */
-  background-color: #f7e7de;
+  background-color: #b2b2b2;
 }
 
 .startpadding {
@@ -97,26 +71,12 @@ body {
 }
 
 .map {
-  /* background-image: url(worldmap.png);
-  background-size: 100% 100%; */
   position: static;
 }
 
 .padding1 {
   position: static;
 }
-
-/* .pie {
-  background-image: url(pie.png);
-  background-size: 100% 100%;
-  position: static;
-} */
-
-/* .line1 {
-  background-image: url(figure3.png);
-  background-size: 100% 100%;
-  position: static;
-} */
 
 .padding2 {
   position: static;
@@ -125,12 +85,6 @@ body {
 .top-buffer { margin-top: 50px; }
 
 
-/* .line2 {
-  background-image: url(figure4.png);
-  background-size: 100% 100%;
-  position: static;
-} */
-
 .toolTip {
   background: black;
   color: white;
@@ -138,7 +92,6 @@ body {
   text-align: center;
   padding: 5px;
   pointer-events: none !important;
-  /* pointer-events: none !important; */
 }
 
 input[type=range] {
@@ -164,4 +117,20 @@ input[type=range]::-webkit-slider-thumb {
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: -6px;
+}
+
+a:link {
+  color: black;
+}
+
+a:hover {
+  color: white;
+}
+
+a:visited {
+  color: #878787;
+}
+
+p {
+  text-align: center;
 }

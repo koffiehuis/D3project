@@ -11,7 +11,7 @@ def load_csv():
                 if ("Total Electricity" and "Main activity" in row[1]
                     and row[6] == "total_electricity"):
                     row = row[:-1]
-                    row[0] = row[0][0:5]
+                    # row[0] = row[0][0:5]
                     data.append(row)
 
         headers = ['Country or Area', 'Commodity - Transaction', 'Year', 'Unit',
@@ -59,12 +59,40 @@ def add_id(df):
                 else:
                     continue
 
-            country_dict[row[8][0:5]] = [row[3], iso_field]
+            country_dict[row[8]] = [row[3], iso_field]
 
     region_list = []
     iso_list = []
 
+    hardcode = {"Korea, Dem.Ppl's.Rep.":  "Democratic People's Republic of Korea",
+                'T.F.Yug.Rep. Macedonia': "The former Yugoslav Republic of Macedonia",
+                "CÃ´te d'Ivoire": "Côte d’Ivoire",
+                'St. Helena and Depend.': "Saint Helena",
+                'Venezuela (Bolivar. Rep.)': "Venezuela (Bolivarian Republic of)",
+                'St. Lucia': "Saint Lucia",
+                'Korea, Republic of': "Republic of Korea",
+                'St. Pierre-Miquelon': "Saint Pierre and Miquelon",
+                'Yemen, Dem. (former)': "Yemen",
+                'Swaziland': "Eswatini",
+                'United Kingdom': "United Kingdom of Great Britain and Northern Ireland",
+                'Central African Rep.': "Central African Republic",
+                "Lao People's Dem. Rep.": "Lao People's Democratic Republic",
+                'Falkland Is. (Malvinas)': "Falkland Islands (Malvinas)",
+                'Faeroe Islands': "Faroe Islands",
+                'St. Vincent-Grenadines': "Saint Vincent and the Grenadines",
+                'Dem. Rep. of the Congo': "Democratic Republic of the Congo",
+                'United States': "United States of America",
+                'Iran (Islamic Rep. of)': "Iran (Islamic Republic of)",
+                'United States Virgin Is.': "United States Virgin Islands",
+                'Micronesia (Fed. States of)': "Micronesia (Federated States of)",
+                'United Rep. of Tanzania': "United Republic of Tanzania",
+                'Bolivia (Plur. State of)': "Bolivia (Plurinational State of)",
+                'St. Kitts-Nevis': "Saint Kitts and Nevis"}
+
     for name in df["Country or Area"].tolist():
+        if name in hardcode:
+            name = hardcode[name]
+            print(name)
         try:
             region_list.append(country_dict[name][0])
             iso_list.append(country_dict[name][1])
@@ -75,9 +103,27 @@ def add_id(df):
     df["ISO"] = iso_list
 
     # print(df.loc[df['ISO'] == "DEU"])
+    energy_file = set()
+    country_file = set()
+    iso_file = set()
+    fout_file = set()
+    for index, row in df.iterrows():
+        # mand.update(i)
+        energy_file.add(row["Country or Area"],)
+        iso_file.add(row["ISO"],)
+        if not row["ISO"]:
+            fout_file.add(row["Country or Area"],)
+
+    print(fout_file)
+    print(len(fout_file))
+
+    print(f"energy: {len(energy_file)}")
+    print(f"country: {len(country_dict)}")
+    print(f"iso: {len(iso_file)}")
+
+    print(country_dict)
 
     del df["Country or Area"]
-    print(df)
     return df
 
 def write_json(df):
