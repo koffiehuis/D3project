@@ -13,7 +13,7 @@ The dataset from [this site](https://www.kaggle.com/unitednations/international-
 * Region ID
 * Tooltip information
 
-![alt_text](data/sketchnew.jpg)
+![alt_text](docs/sketchnew.jpg)
 *Shows my design sketch again*
 
 ## Transformations:
@@ -34,7 +34,7 @@ For preprocessing the following steps will need to be taken:
 ## Methods:
 ### Preprocessing methods:
 
-![alt_text](data/preprocessing1.png)
+![alt_text](docs/preprocessing1.png)
 *Shows diagram of preprocessing (quite simple)*
 
 #### load_csv()
@@ -46,7 +46,7 @@ Now a region id will be added to each row. This will result in yet an extra colu
 #### write_json()
 Writes the preprocessed data to JSON-file.
 
-![alt_text](data/diagram1.jpg)
+![alt_text](docs/diagram1.jpg)
 *Show diagram of initializing (left) and possible updating (right) of the charts*
 
 ### Initialization of page:
