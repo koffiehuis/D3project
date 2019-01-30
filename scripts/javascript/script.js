@@ -582,7 +582,7 @@ function loadDataLine1() {
 
       // On hover-over, show tooltip and accentuate dots
       .on("mouseover", function(d) {
-        toolTipDot.show(d);
+        toolTipDot.show(d)
           .style("left", `${d3.event.pageX}px`)
           .style("top", `${d3.event.pageY - 50}px`);
         parentColor = d3.select(this.parentNode).select(".lineLine1")
@@ -802,7 +802,7 @@ function loadDataLine2() {
         .style("stroke-width", "4px");
     })
     .on("mouseout", function() {
-      toolTipLine.hide();
+      toolTipLine.hide()
       d3.select(this)
         .style("stroke", function(d) {
           return colorFunction(maxValue, getMeanValue(d));
@@ -837,7 +837,7 @@ function loadDataLine2() {
 
       // Show tooltip and accentuations
       .on("mouseover", function(d) {
-        toolTipDot.show(d);
+        toolTipDot.show(d)
           .style("left", `${d3.event.pageX}px`)
           .style("top", `${d3.event.pageY - 50}px`);
         parentColor = d3.select(this.parentNode).select(".PathLine2");
