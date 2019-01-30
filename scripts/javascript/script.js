@@ -279,7 +279,8 @@ function loadDataPie() {
 
   pieData = pie(filterData("pie"));
 
-  // Source: https://stackoverflow.com/questions/14534024/preventing-overlap-of-text-in-d3-pie-chart
+  // Source: https://stackoverflow.com/questions/14534024/preventing-overlap-of
+  //         -text-in-d3-pie-chart
   // Returns angle for rotation-translation
   var getAngle = function (d) {
       return (180 / Math.PI * (d.startAngle + d.endAngle) / 2 - 90);
@@ -296,7 +297,8 @@ function loadDataPie() {
      .data(pieData)
    .enter().append("g")
      .attr("class", "arc")
-     .attr("transform", "translate(" + svgWidth / 2 + " " + svgHeight / 2 + ")");
+     .attr("transform", ("translate(" + svgWidth / 2 + " "
+           + svgHeight / 2 + ")"));
 
   // Removes old arc-paths, if any
   d3.selectAll(".piePath").remove()
@@ -575,15 +577,18 @@ function loadDataLine1() {
         toolTipDot.show(d)
         .style("left", `${d3.event.pageX}px`)
         .style("top", `${d3.event.pageY - 50}px`)
-        parentColor = d3.select(this.parentNode).select(".lineLine1").style("stroke")
-        d3.select(this.parentNode).select(".lineLine1").style("stroke", "#74ffb0")
+        parentColor = d3.select(this.parentNode).select(".lineLine1")
+          .style("stroke");
+        d3.select(this.parentNode).select(".lineLine1")
+          .style("stroke", "#74ffb0")l
 
       })
 
       // Hides tooltip and accentuation
       .on("mouseout", function(d) {
         toolTipDot.hide()
-        d3.select(this.parentNode).select(".lineLine1").style("stroke", parentColor)
+        d3.select(this.parentNode).select(".lineLine1")
+          .style("stroke", parentColor);
       })
 
   // Add Y-axis to chart
@@ -680,7 +685,8 @@ function loadDataLine2() {
   // Get correct scales for axis and lines
   var parseTime = d3.timeParse("%Y");
 
-  var xScale = d3.scaleTime().domain([1990, 2014]).range([0, widthLine2 * 0.85]);
+  var xScale = d3.scaleTime().domain([1990, 2014])
+    .range([0, widthLine2 * 0.85]);
 
   var yScale = d3.scaleLinear().domain([0, maxY]).range([heightLine2, 0]);
 
@@ -753,7 +759,8 @@ function loadDataLine2() {
     .attr("class", "toolTip")
     .offset([-10, 0])
     .html(function(d) {
-      return "<span class='toolInfo'>" + d.Region + "<br/>" + d.Year + ": " + Math.round(d.Quantity) + " GWh "+ "</span>";
+      return ("<span class='toolInfo'>" + d.Region + "<br/>" + d.Year + ": "
+              + Math.round(d.Quantity) + " GWh "+ "</span>");
     })
 
   // Tooltip showing region, bound to lines
@@ -822,16 +829,18 @@ function loadDataLine2() {
         toolTipDot.show(d)
         .style("left", `${d3.event.pageX}px`)
         .style("top", `${d3.event.pageY - 50}px`)
-        parentColor = d3.select(this.parentNode).select(".PathLine2").style("stroke")
+        parentColor = d3.select(this.parentNode).select(".PathLine2")
+          .style("stroke");
 
-        d3.select(this.parentNode).select(".PathLine2").style("stroke", "#74ffb0")
-
+        d3.select(this.parentNode).select(".PathLine2")
+          .style("stroke", "#74ffb0");
       })
 
       // Hide tooltip and accentuation
       .on("mouseout", function(d) {
         toolTipDot.hide()
-        d3.select(this.parentNode).select(".PathLine2").style("stroke", parentColor)
+        d3.select(this.parentNode).select(".PathLine2")
+          .style("stroke", parentColor);
       });
 }
 
@@ -883,7 +892,8 @@ function categoryOptions () {
 
   // Add data to option=tags as values and text
   d3.selectAll("option")
-    .data(["Choose worldmap category", "Hydro", "Solar", "Wind", "Combustion", "Nuclear", "Other", "Geothermal"])
+    .data(["Choose worldmap category", "Hydro", "Solar", "Wind", "Combustion",
+           "Nuclear", "Other", "Geothermal"])
     .attr("value", function(d) {
       return d;
     })
@@ -919,8 +929,8 @@ function filterData(spec) {
 
   // Selects data for linechart 1
   else if  (spec == "line1") {
-    var groupCountry = _.groupBy(allData, obj => obj.ISO);
-    var groupCategory = _.groupBy(groupCountry[countryOption], obj => obj.categoryTag);
+    var groupCountry = _.groupBy(allData, obj => obj.ISO)[countryOption];
+    var groupCategory = _.groupBy(groupCountry, obj => obj.categoryTag);
     array = [];
     for (var index in Object.values(groupCategory)) {
       sorted = Object.values(groupCategory)[index].sort((a, b) => (a.Year > b.Year) ? 1 : -1)
