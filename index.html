@@ -1,15 +1,50 @@
-<!DOCTYPE HTML>
-<!-- Mark van Malestein -->
-<!-- 10807640 -->
-<html>
-<head>
-<title>Index Page Mark</title>
-</head>
-<body>
-  <h1>Project</h1>
-  <h2>Mark van Malestein</h2>
-  <h2>10807640</h2>
-  <a href="scripts/html/html1.html">Prototype</a><br>
-</body>
+<!DOCTYPE html>
+<!-- Mark van Malestein
+10807640
+d3-linked-views -->
 
+
+<html>
+  <div class="topnav">
+    <a class="active" href="html1.html">Charts</a>
+      <select id="mySelect">
+        <option selected disabled></option>
+      </select>
+    <a href="html2.html">About</a>
+    <a href="html3.html">References</a>
+  </div>
+  <head>
+
+    <h1>Electricity sources visualized</h1><br>
+
+  </head>
+  <body>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/lodash/4.17.2/lodash.min.js'></script>
+    <script src="https://datamaps.github.io/scripts/datamaps.world.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+    <script src="https://koffiehuis.github.io/D3project/scripts/javascript/colorbrewer.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://koffiehuis.github.io/D3project/scripts/css/css1.css">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6" id="mapDiv">
+          </div>
+        <div class="col-md-6" id="pieDiv">
+          </div>
+      </div>
+      <div class="row top-buffer"></row>
+      <div class="row">
+        <div class="col-md-6" id="line1Div">
+        </div>
+        <div class="col-md-6" id="line2Div">
+        </div>
+      </div>
+    </div>
+
+    <script src="https://koffiehuis.github.io/D3project/scripts/javascript/script.js"></script>
+
+</body>
 </html>
