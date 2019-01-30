@@ -856,7 +856,7 @@ function initializeSlider() {
     .style("left", "135px")
     .style("background", "white")
     .attr("rx", 10)
-    .text(`${value}`)
+    .text(`${mySlider.value}`)
 
 
   // showSliderValue(mySlider.value)
