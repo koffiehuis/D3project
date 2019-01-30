@@ -840,7 +840,7 @@ function loadDataLine2() {
         toolTipDot.show(d)
           .style("left", `${d3.event.pageX}px`)
           .style("top", `${d3.event.pageY - 50}px`);
-        parentColor = d3.select(this.parentNode).select(".PathLine2");
+        parentColor = d3.select(this.parentNode).select(".PathLine2")
           .style("stroke");
 
         d3.select(this.parentNode).select(".PathLine2")
