@@ -866,38 +866,35 @@ function initializeSlider() {
   //
   //   yearOption = value;
   // }
+  categoryOptions()
+};
 
-  function categoryOptions () {
-    for (var i = 0; i < 7; i++) {
-      d3.select("select")
-        .append("option")
-        .attr("class", "option1")
-    }
-
-
-    d3.selectAll("option")
-      .data(["Choose worldmap category", "Hydro", "Solar", "Wind", "Combustion", "Nuclear", "Other", "Geothermal"])
-      .attr("value", function(d) {
-        return d;
-      })
-      .text(function(d) {
-        return d;
-      })
+function categoryOptions () {
+  for (var i = 0; i < 7; i++) {
+    d3.select("select")
+      .append("option")
+      .attr("class", "option1")
   }
 
-  d3.selectAll("select").on("change", function() {
-    var selected = document.getElementById("mySelect")
-    categoryOption = selected.options[selected.selectedIndex].value
-    loadDataMap();
-    loadDataPie();
-    loadDataLine2();
-    addTitles();
-  })
 
+  d3.selectAll("option")
+    .data(["Choose worldmap category", "Hydro", "Solar", "Wind", "Combustion", "Nuclear", "Other", "Geothermal"])
+    .attr("value", function(d) {
+      return d;
+    })
+    .text(function(d) {
+      return d;
+    })
+}
 
-  categoryOptions()
-
-};
+d3.selectAll("select").on("change", function() {
+  var selected = document.getElementById("mySelect")
+  categoryOption = selected.options[selected.selectedIndex].value
+  loadDataMap();
+  loadDataPie();
+  loadDataLine2();
+  addTitles();
+})
 
 
 function filterData(spec) {
