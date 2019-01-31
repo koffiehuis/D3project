@@ -84,12 +84,11 @@ I wanted to implement borders around each chart container to make the page more 
 This took me a lot of time to fully understand and implement. But, I'm glad I did, because the page looks very well ordered when resizing the browser window.
 
 ##### Linecharts: legend or hover-over?
+At first, I used an ordinal colorscheme for the lines in the linechart. With the ordinal scale it was very easy to differentiate between the different lines and implementing a legend made sense, because the colors were so different. However, using the ordinal color scale  resulted in discrepancies between the colors of the worldmap / piechart and the two linecharts. Eventually, I decided that using the same white-blue gradient in all charts would be the better choice.
 
-
-# Decisions
-no legend in linecharts but color-gradient/tooltips. More dynamic less clear
-choose for seperate pages (chart page remains ordered and tidy), interactions/functionalities less obvious
-implementing same colorgradient for all charts. Organized look, but line/piechart less obvious which data is which
+##### Seperate pages (charts, about, references)
+I divided the content of my project into three different pages (chart, about and references). The downside here is that the description of interactivity and functionality of my main-page is not shown on the main-page. I think this could result in ambiguity about the functionality of my page. On the upside though, the main page looks very well organized.
 
 # Credentials
+Mark van Malestein, group K, 10807640
 
