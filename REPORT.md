@@ -35,6 +35,8 @@ These actions are represented in the flowchart below.
   * Initializes range input element
 * categoryOptions()
   * Sets options for dropdown-menu
+* initializeTitles()
+  * Initializes divs for titles
 
 ### Update functions:
 * loadDataMap()
@@ -51,11 +53,29 @@ These actions are represented in the flowchart below.
 * loadDataLine2()
   * Loads specific values (based of categoryOption)
   * Adds color, lines, tooltips and transition
- 
+* addTitles()
+  * Appends text to title-divs
+
  ### Helper functions:
- * 
+ * filterData()
+   * Isolates chart-specific data from the main data array and returns it as an array of objects
+ * getValues()
+   * Extracts quantative values from an array of objects and returns it as an array.
+ * convert()
+   * Converts numeric strings to ints and floats
+   * Returns nothing
+ * getMaxValue()
+   * Returns highest value in an array of objects
+ * getMeanValue()
+   * Returns mean of values in an array of objects
+ * colorFunction()
+   * Takes 1 datapoint value and 1 maximum value
+   * Returns correct color from gradient
+   
 # Challenges
 
 
 # Decisions
+
+# Credentials
 
