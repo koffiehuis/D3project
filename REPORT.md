@@ -17,6 +17,25 @@ There are six situations where functions are called:
 These actions are represented in the flowchart below.
 ![alt_text](docs/flowchart_REPORT.png)
 
+## High-level functions
+### Initialisation functions:
+* initializeMapContainer()
+  * Initializes worldmap svg and country-paths (via json)
+  * Calls loadDataMap()
+* initializePieContainer()
+  * Initialized pie-chart svg
+  * Calls loadDataPie()
+* initializeLine1Container()
+  * Initializes container for linechart showing values for different categories for one country over time
+  * Calls loadDataLine1()
+* initializeLine2Container()
+  * Initializes container for linechart showing values for differen regions for one category over time
+  * Calls loadDataLine2()
+* initializeSlider()
+  * Initializes range input element
+* categoryOptions()
+  * Sets options for dropdown-menu
+
 
 # Challenges
 
