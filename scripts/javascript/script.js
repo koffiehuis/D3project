@@ -502,6 +502,7 @@ function loadDataLine1() {
 
   // Tooltip showing region, year and category values, bound to dots
   var toolTipDot = d3.tip()
+    .attr("class", "toolTip")
     .offset([-10, 0])
     .html(function(d) {
       return ("<span class='toolInfo'>" + d.categoryTag + "<br/>" + d.Year
@@ -510,6 +511,7 @@ function loadDataLine1() {
 
   // Tooltip showing only region information, bound to line
   var toolTipLine = d3.tip()
+    .attr("class", "toolTip")
     .offset([-10, 0])
     .html(function(d) {
       return "<span class='toolInfo'>" + d + "</span>";
