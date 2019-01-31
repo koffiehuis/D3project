@@ -73,10 +73,23 @@ These actions are represented in the flowchart below.
    * Takes 1 datapoint value and 1 maximum value
    * Returns correct color from gradient
    
-# Challenges
+# Challenges and Decisions
+##### Finding data
+When writing the proposal I came up with two datasets which I thought were interesting to look at. However, these didn't provide me with enough data to answer the questions I proposed. So, last minute I decided to use the electricity dataset, which complex enough for this project, but less interesting.
+
+##### Implementing borders
+I wanted to implement borders around each chart container to make the page more appealing, but I couldn't make them look neat. So I decided not to apply them.
+
+##### Implementing bootstrap
+This took me a lot of time to fully understand and implement. But, I'm glad I did, because the page looks very well ordered when resizing the browser window.
+
+##### Linecharts: legend or hover-over?
 
 
 # Decisions
+no legend in linecharts but color-gradient/tooltips. More dynamic less clear
+choose for seperate pages (chart page remains ordered and tidy), interactions/functionalities less obvious
+implementing same colorgradient for all charts. Organized look, but line/piechart less obvious which data is which
 
 # Credentials
 
