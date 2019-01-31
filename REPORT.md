@@ -6,6 +6,7 @@ Three settings are used to specify which data is shown:
 * Energy-source: by using either the dropdown-menu or clicking on the pie-chart.
 
 # Design
+## High-level overview
 There are six situations where functions are called:
 * The window loads
 * The window-size is adjusted
@@ -17,7 +18,7 @@ There are six situations where functions are called:
 These actions are represented in the flowchart below.
 ![alt_text](docs/flowchart_REPORT.png)
 
-## High-level functions
+## Function descriptions
 ### Initialisation functions:
 * initializeMapContainer()
   * Initializes worldmap svg and country-paths (via json)
