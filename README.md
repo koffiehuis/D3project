@@ -1,4 +1,5 @@
-# http://koffiehuis.github.io/D3project
+# [Github pages](http://koffiehuis.github.io/D3project)
+# [Product demo (video)](https://drive.google.com/file/d/1Q9-z_SuUAoxzKqj5qV-9EeKp5XoztAR9/view)
 # Electricity sources Visualized
 ##### Credentials
 * Mark van Malestein
