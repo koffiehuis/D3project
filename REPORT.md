@@ -38,19 +38,19 @@ These actions are represented in the flowchart below.
 
 ### Update functions:
 * loadDataMap()
- * Loads specific values (based of categoryOption and yearOption)
- * Add color, tooltip, legend
- * Adds on-click funtion to change countryOption
+  * Loads specific values (based of categoryOption and yearOption)
+  * Add color, tooltip, legend
+  * Adds on-click funtion to change countryOption
 * loadDataPie()
- * Loads specific values (based of yearOption and countryOption)
- * Add color, tooltip, labels and transition
- * Adds on-click function to change categoryOption
+  * Loads specific values (based of yearOption and countryOption)
+  * Add color, tooltip, labels and transition
+  * Adds on-click function to change categoryOption
 * loadDataLine1()
- * Loads specific values (based of countryOption)
- * Adds color, lines, tooltips and transition
+  * Loads specific values (based of countryOption)
+  * Adds color, lines, tooltips and transition
 * loadDataLine2()
- * Loads specific values (based of categoryOption)
- * Adds color, lines, tooltips and transition
+  * Loads specific values (based of categoryOption)
+  * Adds color, lines, tooltips and transition
  
  ### Helper functions:
  * 
