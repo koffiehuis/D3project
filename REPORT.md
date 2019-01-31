@@ -6,7 +6,7 @@ Three settings are used to specify which data is shown:
 * Energy-source: by using either the dropdown-menu or clicking on the pie-chart.
 
 # Design
-<img src="docs/flowchart_REPORT.png" align="center" height=500" >
+![alt_text](docs/flowchart_REPORT.png)
 
 
 # Challenges
