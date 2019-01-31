@@ -81,7 +81,7 @@ When writing the proposal I came up with two datasets which I thought were inter
 I wanted to implement borders around each chart container to make the page more appealing, but I couldn't make them look neat. So I decided not to apply them.
 
 ##### Implementing bootstrap
-This took me a lot of time to fully understand and implement. But, I'm glad I did, because the page looks very well ordered when resizing the browser window.
+This took me a lot of time to fully understand and implement bootstrap. But, I'm glad I did, because the page looks very well ordered when resizing the browser window.
 
 ##### Linecharts: legend or hover-over?
 At first, I used an ordinal colorscheme for the lines in the linechart. With the ordinal scale it was very easy to differentiate between the different lines and implementing a legend made sense, because the colors were so different. However, using the ordinal color scale  resulted in discrepancies between the colors of the worldmap / piechart and the two linecharts. Eventually, I decided that using the same white-blue gradient in all charts would be the better choice.
