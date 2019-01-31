@@ -882,6 +882,7 @@ function initializeSlider() {
     loadDataMap();
     loadDataPie();
     addTitles();
+    d3.select("#sliderText").text(`${mySlider.value}`)
   })
 
   // Add label and text, showing selected year
@@ -891,7 +892,8 @@ function initializeSlider() {
     .style("left", "135px")
     .style("background", "white")
     .attr("rx", 10)
-    .text(`${mySlider.value}`);
+    .text(`${mySlider.value}`)
+    .attr("id", "sliderText")
 }
 
 // Adds options to category-select-tag in the navigation bar
