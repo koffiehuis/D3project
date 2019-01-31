@@ -3,7 +3,7 @@
 Three settings are used to specify which data is shown:
 * Country: by clicking on an country on the worldmap.
 * Year:  by using the year-slider.
-* Energy-source: by using either the dropdown-menu or clicking on the pie-chart.
+* Energy-source: by using either the dropdown-menu or clicking on the pie-chart.                                    *screenshot of main page*
 
 # Design
 
